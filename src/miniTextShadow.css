@@ -5,3 +5,9 @@
 	max-width: 100%;
 	overflow: hidden;
 }
+.text-shadow-code-output{
+	border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
