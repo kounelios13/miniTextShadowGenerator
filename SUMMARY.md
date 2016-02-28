@@ -5,5 +5,4 @@
 * [Dependencies](chapters/dependencies.md)
 * [So now what?](chapters/so_now_what.md)
 * [It is not working](chapters/not_working.md)
-   * Generator methods-functions
 
