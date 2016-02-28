@@ -2,5 +2,5 @@
 
 * [Introduction](README.md)
 * [How do I install it?](chapters/installation.md)
-* Dependencies
+* [Dependencies](chapters/dependencies.md)
 
