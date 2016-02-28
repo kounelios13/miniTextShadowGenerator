@@ -46,8 +46,15 @@ function TextShadow(host){
 					$(sliders[i]).prop("min",abs(value));	
 		}//switch
 		return self;
-	}
-	
+	};
+	self.addToFavourites=function(append){
+		if(self.favourites.indexOf(self.getCode())== -1 && self.getCode() != "none")
+			self.favourites.push(self.getCode());
+		return self;
+	};
+	self.getFavourites=function(){
+		return self.favourites;
+	};
 	$(function(){
 		$(self.host_id).html(self.generator_markup);
 		self.activateGenerator();
