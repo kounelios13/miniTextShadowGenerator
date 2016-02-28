@@ -1,8 +1,8 @@
 "use strict";
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
-	var tools={activateGenerator:true,deactivateGenerator:true,setAxisValues:true,addToFavourites:true,removeFavourites:true,getId:false,getFavourites:false,getBackup:false};
-	return tools[name];
+	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,"getBackup":false};
+	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
 function TextShadow(host){
 	function val(o){
