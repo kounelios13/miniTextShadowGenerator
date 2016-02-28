@@ -9,6 +9,11 @@
 	<script src="src/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src='src/bower_components/bootbox.js/bootbox.js'></script>
 	<script src="src/miniTextShadow.js"></script>
+	<style>
+	.fix{
+		margin-top: 8px;
+	}
+    </style>
 	<script>
 	var gen=new TextShadow("#sample").activateGenerator();
 	
@@ -16,6 +21,15 @@
 		$("#button").on("click",function(){
 		var text="<h3 class='text-primary text-center'>text-shadow:"+gen.getCode()+";</h3>";
 			bootbox.alert(text);
+		});
+		$('#showFavourites').click(function(){
+			var list=gen.getFavourites();
+			var ul="<ul class='fix list-group'>\n";
+			for(var i=0,max=list.length;i<max;i++)
+				ul+="<li class='list-group-item'>text-shadow:"+list[i]+";</li>";
+			ul+="</ul>";
+			bootbox.alert(ul);
+			return ul;
 		});
 	});
 	</script>
@@ -35,6 +49,8 @@
 			</ul>
 		</div>
 		<div id="button"class="btn btn-info" >Get code</div>
+		<div class="btn btn-info" onclick="gen.addToFavourites()">Add to favourites</div>
+		<div class="btn btn-primary" id="showFavourites">Show Favourites</div>
 	</div>
 </body>
 
