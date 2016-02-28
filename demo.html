@@ -8,15 +8,23 @@
 	<script src='src/bower_components/jquery/dist/jquery.min.js'></script>
 	<script src="src/miniTextShadow.js"></script>
 	<script>
-	var gen=new TextShadow("#sample");
-		
-		
+	var gen=new TextShadow("#sample").activateGenerator();
 	</script>
 </head>
 <body>
 	<div class="container">
 		<div class="jumbotron text-center">Mini Text Shadow generator</div>
-		<div id="sample"></div>
+		<div id="sample">
+			<p>I will be backed up</p>
+			<ul class="list-group">
+				<li class="list-group-item">Item 1</li>
+				<li class="list-group-item">Item 2</li>
+				<li class="list-group-item">Item 3</li>
+				<li class="list-group-item">Item 4</li>
+				<li class="list-group-item">Item 5</li>
+				<li class="list-group-item">Item 6</li>
+			</ul>
+		</div>
 	</div>
 </body>
 
