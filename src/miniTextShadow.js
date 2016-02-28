@@ -1,4 +1,9 @@
 "use strict";
+function isChainable(name){
+	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
+	var tools={activateGenerator:true,deactivateGenerator:true,setAxisValues:true,addToFavourites:true,removeFavourites:true,getId:false,getFavourites:false,getBackup:false};
+	return tools[name];
+}
 function TextShadow(host){
 	function val(o){
 		return $(o).val();
@@ -71,6 +76,7 @@ function TextShadow(host){
 		var del;
 		if( del=confirm("Are you sure you want to erase your favourites?"))
 			self.favourites.length=0;
+		return self;
 	};
 	$(function(){
 		self.content_backup=$(self.host_id).html();
