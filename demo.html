@@ -6,9 +6,18 @@
 	<link rel="stylesheet" href="src/bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="src/miniTextShadow.css">
 	<script src='src/bower_components/jquery/dist/jquery.min.js'></script>
+	<script src="src/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src='src/bower_components/bootbox.js/bootbox.js'></script>
 	<script src="src/miniTextShadow.js"></script>
 	<script>
 	var gen=new TextShadow("#sample").activateGenerator();
+	
+	$(function(){
+		$("#button").on("click",function(){
+		var text="<h3 class='text-primary text-center'>text-shadow:"+gen.getCode()+";</h3>";
+			bootbox.alert(text);
+		});
+	});
 	</script>
 </head>
 <body>
@@ -25,6 +34,7 @@
 				<li class="list-group-item">Item 6</li>
 			</ul>
 		</div>
+		<div id="button"class="btn btn-info" >Get code</div>
 	</div>
 </body>
 

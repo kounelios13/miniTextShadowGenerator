@@ -50,8 +50,9 @@ function TextShadow(host){
 		var sliders=$(self.getId()+" .text-shadow-sliders");
 		if(isNaN(value) || !value || !limit)
 			throw new Error("An error occured.");
+		var value=abs(value);
 		switch(limit.toUpperCase()){
-			value=abs(value);
+			
 			/*var max=$(sliders[0]).prop("max");
 			var min=$(sliders[0]).prop("min");*/
 			case "MIN":
