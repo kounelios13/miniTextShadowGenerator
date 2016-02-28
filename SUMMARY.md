@@ -1,0 +1,1 @@
+In this manual you will find anything you need to know about miniTextShadow generator
