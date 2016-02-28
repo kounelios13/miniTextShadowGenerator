@@ -4,4 +4,4 @@ Once you have everything installed everything needed you can create a text shado
 
 ```var generator=new TextShadow("#sample");```
     
-But wait?What is #sample?Every text shadow generator must be hosted somewhere in the page.So #sample is an id of an html element which will host our generator.Beware that everything inside #sample will be erased after the generator is created.
+But wait?What is #sample?Every text shadow generator must be hosted somewhere in the page.So #sample is an id of an html element which will host our generator.Beware that everything inside #sample will be erased after the generator is created.Don't worry.It will be saved inside the generator.You will be able to restore it.We will talk about it in an other chapter.
