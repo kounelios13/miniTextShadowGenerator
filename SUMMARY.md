@@ -1,1 +1,4 @@
-In this manual you will find anything you need to know about miniTextShadow generator
+# Summary
+
+* [Introduction](README.md)
+* [How do I install it?](chapters/how_do_i_install_it.md)
