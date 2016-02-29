@@ -1,7 +1,7 @@
 "use strict";
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
-	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,"getBackup":false};
+	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,"getBackup":false};
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
 function TextShadow(host){
@@ -10,7 +10,7 @@ function TextShadow(host){
 	}
 	function abs(a){return Math.abs(a);}
 	var self=this;
-	self.generator_markup="<div class='text-shadow-container'> <div class='panel panel-primary'> <div class='panel-heading text-center'>Text shadow Generator</div> <div class='panel-body'> <div class='row text-center'> <div class='col-md-4'> <h3 class='text-info'>X-axis</h3> <input type='range' class='text-shadow-sliders x-axis' min='-100' max='150' value=0> </div> <div class='col-md-4'> <h3 class='text-info'>Y-axis</h3> <input type='range' class='text-shadow-sliders y-axis' min='-100' max='150' value=0> </div> <div class='col-md-4'> <h3 class='text-info'>Blur</h3> <input type='range' class='text-shadow-sliders blur' min='0' max='10' step='0.1' value='0'> </div> </div> <div class='row text-center'> <div class='col-md-12'> <h3 class='text-shadow-output'>Shadow is applied here</h3> </div> </div> <div class='row text-center'> <div class='col-md-3'> <h3 class='text-info'>Red</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Green</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Blue</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Opacity</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='1' step='0.1' value='1'> </div> </div><!-- /row --> </div> <!-- /panel-body --> <div class='panel-heading text-center text-shadow-code-output'>Code</div> </div> </div> ";
+	self.generator_markup="<div class='text-shadow-container'> <div class='panel panel-primary'> <div class='panel-heading text-center'>Text shadow Generator</div> <div class='panel-body'> <div class='row text-center'> <div class='col-md-4'> <h3 class='text-info'>X-axis</h3> <input type='range' class='text-shadow-sliders x-axis' min='-100' max='150' value=0> </div> <div class='col-md-4'> <h3 class='text-info'>Y-axis</h3> <input type='range' class='text-shadow-sliders y-axis' min='-100' max='150' value=0> </div> <div class='col-md-4'> <h3 class='text-info'>Blur</h3> <input type='range' class='text-shadow-sliders blur' min='0' max='10' step='0.1' value='0'> </div> </div> <div class='row text-center'> <div class='col-md-12'> <h3 class='text-shadow-output'>Shadow is applied here</h3> </div> </div> <div class='row text-center'> <div class='col-md-3'> <h3 class='text-info'>Red</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Green</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Blue</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Opacity</h3> <input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> </div> </div><!-- /row --> </div> <!-- /panel-body --> <div class='panel-heading text-center text-shadow-code-output'>Code</div> </div> </div> ";
 	self.host_id=host;
 	self.shadow_code="none";
 	self.content_backup=null;
@@ -63,6 +63,16 @@ function TextShadow(host){
 				for(var i=0;i<sliders.length-1;i++)
 					$(sliders[i]).prop("max",value);	
 		}//switch
+		return self;
+	};
+	self.resetGenerator=function(){
+		var host=self.getId();
+		$(host+" .text-shadow-sliders").val(0);
+		$(host+" .text-shadow-color-sliders").val(0);
+		$(host+" .opacity").val(1);
+		self.shadow_code="0px 0px rgb(0,0,0)";
+			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
+		self.activateGenerator();
 		return self;
 	};
 	self.addToFavourites=function(append){
