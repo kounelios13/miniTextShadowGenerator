@@ -1,4 +1,5 @@
 "use strict";
+var __version__='1.0.1';
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
 	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,"getBackup":false};
@@ -10,8 +11,34 @@ function TextShadow(host){
 	}
 	function abs(a){return Math.abs(a);}
 	var self=this;
-	self.generator_markup="<div class='text-shadow-container'> <div class='panel panel-primary'> <div class='panel-heading text-center'>Text shadow Generator</div> <div class='panel-body'> <div class='row text-center'> <div class='col-md-4'> <h3 class='text-info'>X-axis</h3> <input type='range' class='text-shadow-sliders x-axis' min='-100' max='150' value=0> </div> <div class='col-md-4'> <h3 class='text-info'>Y-axis</h3> <input type='range' class='text-shadow-sliders y-axis' min='-100' max='150' value=0> </div> <div class='col-md-4'> <h3 class='text-info'>Blur</h3> <input type='range' class='text-shadow-sliders blur' min='0' max='10' step='0.1' value='0'> </div> </div> <div class='row text-center'> <div class='col-md-12'> <h3 class='text-shadow-output'>Shadow is applied here</h3> </div> </div> <div class='row text-center'> <div class='col-md-3'> <h3 class='text-info'>Red</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Green</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Blue</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> <div class='col-md-3'> <h3 class='text-info'>Opacity</h3> <input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> </div> </div><!-- /row --> </div> <!-- /panel-body --> <div class='panel-heading text-center text-shadow-code-output'>Code</div> </div> </div> ";
-	self.host_id=host;
+	self.generator_markup="<div class='text-shadow-container'> "+
+	"<div class='panel panel-primary'>"+
+		" <div class='panel-heading text-center'>Text shadow Generator</div>"+
+		"<div class='panel-body'> <div class='row text-center'> "+
+			"<div class='col-md-4'> "+
+				"<h3 class='text-info'>X-axis</h3> "+
+				"<input type='range' class='text-shadow-sliders x-axis' min='-100' max='150' value=0>"+
+			" </div> "+
+		"<div class='col-md-4'>"+
+			" <h3 class='text-info'>Y-axis</h3> "+
+			"<input type='range' class='text-shadow-sliders y-axis' min='-100' max='150' value=0> "
+		+"</div>"
+		+"<div class='col-md-4'>"+
+			"<h3 class='text-info'>Blur</h3>"+
+			"<input type='range' class='text-shadow-sliders blur' min='0' max='10' step='0.1' value='0'> </div> </div>"+
+		" <div class='row text-center'> <div class='col-md-12'> <h3 class='text-shadow-output'>Shadow is applied here</h3> </div> </div> "+
+		"<div class='row text-center'> "+
+		"<div class='col-md-3'>"+
+			"<h3 class='text-info'>Red</h3> "+
+			"<input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> "+
+		" </div> <div class='col-md-3'> "+
+		" <h3 class='text-info'>Green</h3> "+
+		" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'>"+
+		" </div> <div class='col-md-3'> "+
+		"<h3 class='text-info'>Blue</h3> <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> </div> "+
+		"<div class='col-md-3'> <h3 class='text-info'>Opacity</h3> <input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> "+
+		"</div> </div><!-- /row --> </div> <!-- /panel-body --> <div class='panel-heading text-center text-shadow-code-output'>Code</div> </div> </div> ";
+	self.host_id=host;+
 	self.shadow_code="none";
 	self.content_backup=null;
 	self.favourites=[];
@@ -51,10 +78,7 @@ function TextShadow(host){
 		if(isNaN(value) || !value || !limit)
 			throw new Error("An error occured.");
 		var value=abs(value);
-		switch(limit.toUpperCase()){
-			
-			/*var max=$(sliders[0]).prop("max");
-			var min=$(sliders[0]).prop("min");*/
+		switch(limit.toUpperCase()){	
 			case "MIN":
 				for(var i=0;i<sliders.length-1;i++)
 					$(sliders[i]).prop("min",value * -1);
@@ -88,6 +112,22 @@ function TextShadow(host){
 		if( del=confirm("Are you sure you want to erase your favourites?"))
 			self.favourites.length=0;
 		return self;
+	};
+	self.downloadFavourites=function(){
+		var file="/********\n",blob;
+		var items=self.getFavourites();
+		if(items.length<1)
+			return "No favourites found";
+		for(var i=0;i<items.length;i++)
+			file+="text-shadow:"+items[i]+";\n";
+		file+="**************\n";
+		try{
+			blob=new Blob([file], {type: "text/plain;charset=utf-8"});
+			saveAs(blob,"favourites.css");	
+		}
+		catch(e){
+			alert("Filesaver is missing!!!");		
+		}
 	};
 	$(function(){
 		self.content_backup=$(self.host_id).html();
