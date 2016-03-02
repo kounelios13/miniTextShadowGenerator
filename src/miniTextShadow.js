@@ -6,9 +6,7 @@ function isChainable(name){
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
 function TextShadow(host){
-	function val(o){
-		return $(o).val();
-	}
+	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
 	var self=this;
 	self.generator_markup="<div class='text-shadow-container'> "+
@@ -48,16 +46,29 @@ function TextShadow(host){
 			"<input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> "+
 		"</div>"+
 		"</div><!-- /row --> </div> <!-- /panel-body --> <div class='panel-heading text-center text-shadow-code-output'>Code</div> </div> </div> ";
-	self.host_id=host;+
+	self.host_id=host;
 	self.shadow_code="none";
 	self.content_backup=null;
 	self.favourites=[];
 	self.getId=function(){
 		return self.host_id;
 	};
+	self.render=function(){
+		$(function(){
+			self.content_backup=$(self.host_id).html();
+			$(self.host_id).html(self.generator_markup);
+		});
+		return self;
+	};
 	self.getBackup=function(){
 		return self.content_backup;
 	}
+	self.restoreBackup=function(destination){
+		if(!destination)
+			throw new Error("Wrong destination");
+		$(destination).html(self.getBackup());
+		return self;
+	};
 	self.getCode=function(){
 		return self.shadow_code;
 	};
@@ -139,8 +150,5 @@ function TextShadow(host){
 			alert("Filesaver is missing!!!");		
 		}
 	};
-	$(function(){
-		self.content_backup=$(self.host_id).html();
-		$(self.host_id).html(self.generator_markup);
-	});
+	self.render();
 }
