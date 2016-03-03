@@ -9,43 +9,48 @@ function TextShadow(host){
 	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
 	var self=this;
-	self.generator_markup="<div class='text-shadow-container'> "+
-	"<div class='panel panel-primary'>"+
-		"<div class='panel-heading text-center'>Text shadow Generator</div>"+
-		"<div class='panel-body'>"+
-		"<div class='row text-center'> "+
-			"<div class='col-md-4'> "+
-				"<h3 class='text-info'>X-axis</h3> "+
-				"<input type='range' class='text-shadow-sliders x-axis' min='-100' max='150' value=0>"+
-			"</div> "+
-			"<div class='col-md-4'>"+
-				" <h3 class='text-info'>Y-axis</h3> "+
-				"<input type='range' class='text-shadow-sliders y-axis' min='-100' max='150' value=0> "
-			+"</div>"
-			+"<div class='col-md-4'>"+
-				"<h3 class='text-info'>Blur</h3>"+
-				"<input type='range' class='text-shadow-sliders blur' min='0' max='10' step='0.1' value='0'> "+
+	self.generator_markup=""+
+	"<div class='text-shadow-container'> "+
+		"<div class='panel panel-primary'>"+
+			"<div class='panel-heading text-center'>Text shadow Generator</div>"+
+			"<div class='panel-body'>"+
+			"<div class='row text-center'> "+
+				"<div class='col-md-4'> "+
+					"<h3 class='text-info'>X-axis</h3> "+
+					"<input type='range' class='text-shadow-sliders x-axis' min='-100' max='150' value=0>"+
+				"</div> "+
+				"<div class='col-md-4'>"+
+					" <h3 class='text-info'>Y-axis</h3> "+
+					"<input type='range' class='text-shadow-sliders y-axis' min='-100' max='150' value=0> "
+				+"</div>"
+				+"<div class='col-md-4'>"+
+					"<h3 class='text-info'>Blur</h3>"+
+					"<input type='range' class='text-shadow-sliders blur' min='0' max='10' step='0.1' value='0'> "+
+				"</div>"+
 			"</div>"+
+			" <div class='row text-center'> <div class='col-md-12'> <h3 class='text-shadow-output'>Shadow is applied here</h3> </div> </div> "+
+			"<div class='row text-center'> "+
+			"<div class='col-md-3'>"+
+				"<h3 class='text-info'>Red</h3> "+
+				"<input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> "+
+			" </div>"+
+			"<div class='col-md-3'> "+
+				" <h3 class='text-info'>Green</h3> "+
+				" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'>"+
+			" </div> "+
+			" <div class='col-md-3'> "+
+				"<h3 class='text-info'>Blue</h3> "+
+				" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> "+
+			" </div> "+
+			"<div class='col-md-3'> "+
+				" <h3 class='text-info'>Opacity</h3> "+
+				"<input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> "+
+			"</div>"+
+			"</div><!-- /row -->"+
+		" </div> <!-- /panel-body --> "+
+			" <div class='panel-heading text-center text-shadow-code-output'>Code</div>  "+
 		"</div>"+
-		" <div class='row text-center'> <div class='col-md-12'> <h3 class='text-shadow-output'>Shadow is applied here</h3> </div> </div> "+
-		"<div class='row text-center'> "+
-		"<div class='col-md-3'>"+
-			"<h3 class='text-info'>Red</h3> "+
-			"<input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> "+
-		" </div>"+
-		"<div class='col-md-3'> "+
-			" <h3 class='text-info'>Green</h3> "+
-			" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'>"+
-		" </div> "+
-		" <div class='col-md-3'> "+
-			"<h3 class='text-info'>Blue</h3> "+
-			" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> "+
-		" </div> "+
-		"<div class='col-md-3'> "+
-			" <h3 class='text-info'>Opacity</h3> "+
-			"<input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> "+
-		"</div>"+
-		"</div><!-- /row --> </div> <!-- /panel-body --> <div class='panel-heading text-center text-shadow-code-output'>Code</div> </div> </div> ";
+	"</div> ";
 	self.host_id=host;
 	self.shadow_code="none";
 	self.content_backup=null;
@@ -117,7 +122,7 @@ function TextShadow(host){
 		$(host+" .opacity").val(1);
 		self.shadow_code="0px 0px rgb(0,0,0)";
 			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
-		self.activateGenerator();
+		$(host+ " .panel .text-shadow-output").css("text-shadow","none");
 		return self;
 	};
 	self.addToFavourites=function(append){
