@@ -2,7 +2,8 @@
 var __version__='1.0.1';
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
-	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,"getBackup":false};
+	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,
+	"getBackup":false,"restoreBackup":false};
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
 function TextShadow(args){
@@ -64,7 +65,7 @@ function TextShadow(args){
 		return self.host_id;
 	};
 	var render=function(){
-		if(self.getId() != null)
+		if(self.getId() != null && self.getId()[0]=='#')
 			$(function(){
 				self.content_backup=$(self.host_id).html();
 				$(self.host_id).html(self.generator_markup);
