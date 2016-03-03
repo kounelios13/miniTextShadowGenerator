@@ -14,11 +14,11 @@
 		margin-top: 8px;
 	}
 	.no-display{
-		display: none;
+		display: none !important;
 	}
-	.upside{
+	/* .show_more{
 		transform:rotate(180deg);
-	}
+	} */
     </style>
 	<script>
 	var gen=new TextShadow("#sample").activateGenerator();
@@ -33,11 +33,11 @@
 		$('#showFavourites').click(function(){
 			list=gen.getFavourites();
 			ul="<ul class='fix list-group'>\n";
-			var carrets="<div class='row'><div class='col-md-6'><b class='caret show_more pull-left'/></div>"
-			+"<div class='col-md-6'><b class='caret show_less pull-right'/></div></div>";
+			var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_more'></span></div>"
+			+"<div class='col-md-6'><span class='glyphicon glyphicon-chevron-down pull-right show_less'></span></div></div>";
 			if(list.length<1)
 				for(var i=0;i<30;i++){
-					ul+="<li class='list-group-item'> Item no:"+(i+1)+".</li>";
+					ul+="<li class='list-group-item'> Item no:"+i+".</li>";
 					list.push(i+1);
 				}
 			else	
@@ -45,16 +45,20 @@
 					ul+="<li class='list-group-item'>text-shadow:"+list[i]+";</li>";
 			ul+="</ul>"+carrets;
 
-			var items=$(".fix .list-group-item");
-			for(var i=0;i<list.length- Math.floor(list.length % 10);i++)
-				$(items[i]).addClass("no-display");
+			
+			
 			bootbox.alert(ul);
 			return ul;
 		});
 		$(document).on("click"," .show_less",function(){
 			var current_total=list.length;
-			
-			
+			var max=current_total -current_total/10;
+			if(current_total > 10){
+				var items=$(".fix .list-group-item");
+				for(var i=0;i< current_total -10;i++){
+					$(items[i]).hide("slow");
+				}
+			}
 		});
 	});
 	</script>
