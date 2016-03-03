@@ -5,7 +5,7 @@ function isChainable(name){
 	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,"getBackup":false};
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
-function TextShadow(host){
+function TextShadow(args){
 	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
 	var self=this;
@@ -51,18 +51,24 @@ function TextShadow(host){
 			" <div class='panel-heading text-center text-shadow-code-output'>Code</div>  "+
 		"</div>"+
 	"</div> ";
-	self.host_id=host;
+	self.host_id=null;
+	if(typeof args != 'string' || !args || args[0]=='.' || !args[0]=="#"){
+		throw new Error("Invalid id!!!"+args);
+	}
+	else
+		self.host_id=args;
 	self.shadow_code="none";
 	self.content_backup=null;
 	self.favourites=[];
 	self.getId=function(){
 		return self.host_id;
 	};
-	self.render=function(){
-		$(function(){
-			self.content_backup=$(self.host_id).html();
-			$(self.host_id).html(self.generator_markup);
-		});
+	var render=function(){
+		if(self.getId() != null)
+			$(function(){
+				self.content_backup=$(self.host_id).html();
+				$(self.host_id).html(self.generator_markup);
+			});
 		return self;
 	};
 	self.getBackup=function(){
@@ -71,7 +77,14 @@ function TextShadow(host){
 	self.restoreBackup=function(destination){
 		if(!destination)
 			throw new Error("Wrong destination");
-		$(destination).html(self.getBackup());
+		var isClass=destination[0]=='.';
+		if(isClass){
+			var answer=confirm("You are going to create duplicates of your backed content.Are you sure you want to continue");
+			if(answer)
+				$(destination).html(self.getBackup());
+		}
+		else
+			$(destination).html(self.getBackup());
 		return self;
 	};
 	self.getCode=function(){
@@ -155,5 +168,5 @@ function TextShadow(host){
 			alert("Filesaver is missing!!!");		
 		}
 	};
-	self.render();
+	render();
 }
