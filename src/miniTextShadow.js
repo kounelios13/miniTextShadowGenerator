@@ -110,8 +110,8 @@ function TextShadow(args){
 			if(val(sliders[2])!= '0')
 				self.shadow_code+=val(sliders[2])+"px ";
 			self.shadow_code+=color;
-			$(host+ " .text-shadow-code-output").text("text-shadow:"+code+";");
-			$(host+ " .panel .text-shadow-output").css("text-shadow",code);
+			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
+			$(host+ " .panel .text-shadow-output").css("text-shadow",self.shadow_code);
 		});
 		return self;
 	};
@@ -169,8 +169,7 @@ function TextShadow(args){
 			bootbox.alert("No favourites  to show!!!");
 		else{
 			var list_items;
-			function renderlist(){
-				
+			function renderlist(){				
 				var ul="<ul class='list-group fix'>";
 				var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_less'></span></div>"
 				+"<div class='col-md-6'><span class='glyphicon glyphicon-chevron-down pull-right show_more'></span></div></div>";
@@ -194,6 +193,7 @@ function TextShadow(args){
 				console.log("Total:"+favourites.length);
 			});
 			bind(".show_more","click",null,function(){
+				var list_items=$(" .favourite_item");
 				$(list_items).toggleClass("no-display");
 				/*for(var start=total-10;start<total;start++)
 					$(list_items[start]).removeClass("no-display");*/
