@@ -119,13 +119,13 @@ function TextShadow(args){
 			throw new Error("An error occured.");
 		var value=abs(value);
 		switch(limit.toUpperCase()){	
+			//we use for loop because we do not want to target every single slider
 			case "MIN":
 				for(var i=0;i<sliders.length-1;i++)
 					$(sliders[i]).prop("min",value * -1);
 				break;
 			default:
-				for(var i=0;i<sliders.length-1;i++)
-					$(sliders[i]).prop("max",value);	
+				$(sliders[i]).prop("max",value);	
 		}//switch
 		return self;
 	};
@@ -135,7 +135,7 @@ function TextShadow(args){
 		$(host+" .text-shadow-color-sliders").val(0);
 		$(host+" .opacity").val(1);
 		self.shadow_code="0px 0px rgb(0,0,0)";
-			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
+		$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
 		$(host+ " .panel .text-shadow-output").css("text-shadow","none");
 		return self;
 	};
@@ -151,6 +151,33 @@ function TextShadow(args){
 		var del;
 		if( del=confirm("Are you sure you want to erase your favourites?"))
 			self.favourites.length=0;
+		return self;
+	};
+	self.showFavourites=function(){
+		var error="Function has not been implemented yet and it is not part of the public API!!!!";
+		//bootbox.alert("<h1 class='text-info text-center'>"+error+"</h1>");
+		var favourites=self.getFavourites();
+		if(favourites.length<1)
+			bootbox.alert("No favourites  to show!!!");
+		else{
+			function renderlist(){
+				var ul="<ul class='list-group fix'>";
+				var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_more'></span></div>"
+				+"<div class='col-md-6'><span class='glyphicon glyphicon-chevron-down pull-right show_less'></span></div></div>";
+				for(var i=0,max=favourites.length;i<max;i++)
+					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>"
+				ul+="</ul>"+carrets;
+				return ul;	
+				$(function(){
+					$(".show_less").on("click",function(){
+						console.log(true);
+					});
+				});
+				
+			}
+			
+			bootbox.alert(renderlist());
+		}
 		return self;
 	};
 	self.downloadFavourites=function(){
