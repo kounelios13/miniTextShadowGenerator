@@ -101,6 +101,7 @@ function TextShadow(args){
 	};
 	self.activateGenerator=function(){
 		var host=self.getId();
+		var code=self.getCode();
 		bind(host,"mousemove touchmove",null,function(){
 			var sliders=$(host+" .panel-body .text-shadow-sliders");
 			var color_sliders=$(host+" .panel-body .text-shadow-color-sliders");
@@ -109,8 +110,8 @@ function TextShadow(args){
 			if(val(sliders[2])!= '0')
 				self.shadow_code+=val(sliders[2])+"px ";
 			self.shadow_code+=color;
-			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
-			$(host+ " .panel .text-shadow-output").css("text-shadow",self.shadow_code);
+			$(host+ " .text-shadow-code-output").text("text-shadow:"+code+";");
+			$(host+ " .panel .text-shadow-output").css("text-shadow",code);
 		});
 		return self;
 	};
@@ -163,21 +164,24 @@ function TextShadow(args){
 		var error="Function has not been implemented yet and it is not part of the public API!!!!";
 		//bootbox.alert("<h1 class='text-info text-center'>"+error+"</h1>");
 		var favourites=self.getFavourites();
+		var total=favourites.length;
 		if(favourites.length<1)
 			bootbox.alert("No favourites  to show!!!");
 		else{
+			var list_items;
 			function renderlist(){
+				
 				var ul="<ul class='list-group fix'>";
 				var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_less'></span></div>"
 				+"<div class='col-md-6'><span class='glyphicon glyphicon-chevron-down pull-right show_more'></span></div></div>";
-				for(var i=0,max=favourites.length;i<max;i++)
+				for(var i=0;i<total;i++)
 					if(i<10)
 						ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
 					else
 						ul+="<li class='list-group-item favourite_item no-display'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
-				var list_items=$(".favourite_item");
-				for(var i=10;i<favourites.length;i++)
+				list_items=$(".favourite_item");
+				for(var i=10;i<total;i++)
 					$(list_items[i]).hide();
 				return ul;	
 			}
@@ -187,8 +191,12 @@ function TextShadow(args){
 				$(this).addClass('active');
 			});
 			bind(".show_less","click",null,function(){
-				var total;
 				console.log("Total:"+favourites.length);
+			});
+			bind(".show_more","click",null,function(){
+				$(list_items).toggleClass("no-display");
+				/*for(var start=total-10;start<total;start++)
+					$(list_items[start]).removeClass("no-display");*/
 			});
 		}
 		return self;
