@@ -160,6 +160,11 @@ function TextShadow(args){
 		if(favourites.length<1)
 			bootbox.alert("No favourites  to show!!!");
 		else{
+			var activate=function(container,item,fn){
+				$(function(){
+					$(container).on("click",item,fn);
+				});
+			};
 			function renderlist(){
 				var ul="<ul class='list-group fix'>";
 				var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_more'></span></div>"
@@ -168,15 +173,14 @@ function TextShadow(args){
 					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>"
 				ul+="</ul>"+carrets;
 				return ul;	
-				$(function(){
-					$(".show_less").on("click",function(){
-						console.log(true);
-					});
-				});
-				
 			}
-			
 			bootbox.alert(renderlist());
+			var showText=function(){ console.log($(this).text())};
+			activate(".list-group",".list-group-item",function(){
+				$(".list-group li").removeClass('active');
+				$(this).addClass('active');
+			});
+
 		}
 		return self;
 	};
