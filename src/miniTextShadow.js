@@ -9,6 +9,14 @@ function isChainable(name){
 function TextShadow(args){
 	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
+	function bind(container,evnt,item,fn){
+		$(function(){
+			if(item)
+				$(container).on(evnt,item,fn);
+			else
+				$(container).on(evnt,fn);	
+		});
+	}
 	var self=this;
 	self.generator_markup=""+
 	"<div class='text-shadow-container'> "+
@@ -49,7 +57,7 @@ function TextShadow(args){
 			"</div>"+
 			"</div><!-- /row -->"+
 		" </div> <!-- /panel-body --> "+
-			" <div class='panel-heading text-center text-shadow-code-output'>Code</div>  "+
+			" <div class='panel-heading text-center text-shadow-code-output'>text-shadow:0px 0px rgb(0,0,0);</div>  "+
 		"</div>"+
 	"</div> ";
 	self.host_id=null;
@@ -66,7 +74,7 @@ function TextShadow(args){
 	};
 	var render=function(){
 		if(self.getId() != null && self.getId()[0]=='#')
-			$(function(){
+			bind(document,"ready",null,function(){
 				self.content_backup=$(self.host_id).html();
 				$(self.host_id).html(self.generator_markup);
 			});
@@ -93,18 +101,16 @@ function TextShadow(args){
 	};
 	self.activateGenerator=function(){
 		var host=self.getId();
-		$(function(){
-			$(host).on("mousemove touchmove",function(){
-				var sliders=$(host+" .panel-body .text-shadow-sliders");
-				var color_sliders=$(host+" .panel-body .text-shadow-color-sliders");
-				var color=val(color_sliders[3]) != '1'?"rgba("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+","+val(color_sliders[3])+")":"rgb("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+")";
-				self.shadow_code=val(sliders[0])+"px "+val(sliders[1])+"px ";
-				if(val(sliders[2])!= '0')
-					self.shadow_code+=val(sliders[2])+"px ";
-				self.shadow_code+=color;
-				$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
-				$(host+ " .panel .text-shadow-output").css("text-shadow",self.shadow_code);
-			});
+		bind(host,"mousemove touchmove",null,function(){
+			var sliders=$(host+" .panel-body .text-shadow-sliders");
+			var color_sliders=$(host+" .panel-body .text-shadow-color-sliders");
+			var color=val(color_sliders[3]) != '1'?"rgba("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+","+val(color_sliders[3])+")":"rgb("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+")";
+			self.shadow_code=val(sliders[0])+"px "+val(sliders[1])+"px ";
+			if(val(sliders[2])!= '0')
+				self.shadow_code+=val(sliders[2])+"px ";
+			self.shadow_code+=color;
+			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
+			$(host+ " .panel .text-shadow-output").css("text-shadow",self.shadow_code);
 		});
 		return self;
 	};
@@ -160,27 +166,30 @@ function TextShadow(args){
 		if(favourites.length<1)
 			bootbox.alert("No favourites  to show!!!");
 		else{
-			var activate=function(container,item,fn){
-				$(function(){
-					$(container).on("click",item,fn);
-				});
-			};
 			function renderlist(){
 				var ul="<ul class='list-group fix'>";
-				var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_more'></span></div>"
-				+"<div class='col-md-6'><span class='glyphicon glyphicon-chevron-down pull-right show_less'></span></div></div>";
+				var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_less'></span></div>"
+				+"<div class='col-md-6'><span class='glyphicon glyphicon-chevron-down pull-right show_more'></span></div></div>";
 				for(var i=0,max=favourites.length;i<max;i++)
-					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>"
+					if(i<10)
+						ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
+					else
+						ul+="<li class='list-group-item favourite_item no-display'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
+				var list_items=$(".favourite_item");
+				for(var i=10;i<favourites.length;i++)
+					$(list_items[i]).hide();
 				return ul;	
 			}
 			bootbox.alert(renderlist());
-			var showText=function(){ console.log($(this).text())};
-			activate(".list-group",".list-group-item",function(){
+			bind(".list-group","click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
 				$(this).addClass('active');
 			});
-
+			bind(".show_less","click",null,function(){
+				var total;
+				console.log("Total:"+favourites.length);
+			});
 		}
 		return self;
 	};

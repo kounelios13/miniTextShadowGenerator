@@ -11,6 +11,12 @@
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
 }
+.fix{
+    margin-top: 8px;
+}
+.no-display{
+  display: none;
+}
 input[type='range']{
 	outline: none;
 	width: 25%;
