@@ -165,7 +165,7 @@ function TextShadow(args){
 	};
 	self.showFavourites=function(){
 		var error="Function has not been implemented yet and it is not part of the public API!!!!";
-		var index=0;
+		var index=10;
 		/*try{
 			bootbox.alert("<h1 class='text-info text-center'>"+error+"</h1>");	
 		}
@@ -199,14 +199,24 @@ function TextShadow(args){
 				console.log("Total:"+favourites.length);
 			});
 			bind(".show_more","click",null,function(){
+				if(index>=favourites.length)
+					return;//max items displayed so exit the function
 				var current_list="";
-				list_items=$(".favourite_item");
-				for(var i=index;i<total-(total-10);i++){
-					current_list+="<li class='list-group-item'>"+favourites[i]+"</li>";
-				}
+				var total=favourites.length;
+				var diff=total-index;
+				var end;
+				if(diff > 9)
+					end=index+10;
+				else
+					end=index+diff;
+				for(var i=index;i<end;i++)
+					current_list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
+				if(diff>9)
+					index+=10
+				else
+					index+=diff
 				$(".fix").html(current_list);
-				console.log(current_list);
-				index+=10;
+				//console.log(current_list);
 			});
 		}
 		return self;
