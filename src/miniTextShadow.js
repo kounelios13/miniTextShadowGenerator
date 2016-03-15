@@ -18,6 +18,7 @@ function TextShadow(args){
 		});
 	}
 	var self=this;
+	var host=null;
 	self.generator_markup=""+
 	"<div class='text-shadow-container'> "+
 		"<div class='panel panel-primary'>"+
@@ -65,18 +66,19 @@ function TextShadow(args){
 		throw new Error("Invalid id!!!"+args);
 	}
 	else
-		self.host_id=args;
+		self.host_id=host=args;
 	self.shadow_code="none";
 	self.content_backup=null;
 	self.favourites=[];
+	for(var i=1;i<=30;i++)self.favourites.push(i);
 	self.getId=function(){
 		return self.host_id;
 	};
 	var render=function(){
-		if(self.getId() != null && self.getId()[0]=='#')
+		if(host != null && host[0]=='#')
 			bind(document,"ready",null,function(){
-				self.content_backup=$(self.host_id).html();
-				$(self.host_id).html(self.generator_markup);
+				self.content_backup=$(host).html();
+				$(host).html(self.generator_markup);
 			});
 		return self;
 	};
@@ -84,23 +86,23 @@ function TextShadow(args){
 		return self.content_backup;
 	}
 	self.restoreBackup=function(destination){
+		var backup=self.getBackup();
 		if(!destination)
 			throw new Error("Wrong destination");
 		var isClass=destination[0]=='.';
 		if(isClass){
 			var answer=confirm("You are going to create duplicates of your backed content.Are you sure you want to continue");
 			if(answer)
-				$(destination).html(self.getBackup());
+				$(destination).html(backup);
 		}
 		else
-			$(destination).html(self.getBackup());
+			$(destination).html(backup);
 		return self;
 	};
 	self.getCode=function(){
 		return self.shadow_code;
 	};
 	self.activateGenerator=function(){
-		var host=self.getId();
 		var code=self.getCode();
 		bind(host,"mousemove touchmove",null,function(){
 			var sliders=$(host+" .panel-body .text-shadow-sliders");
@@ -116,12 +118,12 @@ function TextShadow(args){
 		return self;
 	};
 	self.deactivateGenerator=function(){
-		$(self.getId()).off();
+		$(host).off();
 		return self;
 	};
 	self.setAxisValues=function(limit,value){
 		//more validations to come here
-		var sliders=$(self.getId()+" .text-shadow-sliders");
+		var sliders=$(host+" .text-shadow-sliders");
 		if(isNaN(value) || !value || !limit)
 			throw new Error("An error occured.");
 		var value=abs(value);
@@ -132,12 +134,12 @@ function TextShadow(args){
 					$(sliders[i]).prop("min",value * -1);
 				break;
 			default:
-				$(sliders[i]).prop("max",value);	
+				for(var i=0;i<sliders.length-1;i++)
+					$(sliders[i]).prop("max",value);	
 		}//switch
 		return self;
 	};
 	self.resetGenerator=function(){
-		var host=self.getId();
 		$(host+" .text-shadow-sliders").val(0);
 		$(host+" .text-shadow-color-sliders").val(0);
 		$(host+" .opacity").val(1);
@@ -147,8 +149,9 @@ function TextShadow(args){
 		return self;
 	};
 	self.addToFavourites=function(append){
-		if(self.favourites.indexOf(self.getCode())== -1 && self.getCode() != "none")
-			self.favourites.push(self.getCode());
+		var code=self.getCode();
+		if(self.favourites.indexOf(code)== -1 && code != "none")
+			self.favourites.push(code);
 		return self;
 	};
 	self.getFavourites=function(){
@@ -162,7 +165,15 @@ function TextShadow(args){
 	};
 	self.showFavourites=function(){
 		var error="Function has not been implemented yet and it is not part of the public API!!!!";
-		//bootbox.alert("<h1 class='text-info text-center'>"+error+"</h1>");
+		var index=0;
+		/*try{
+			bootbox.alert("<h1 class='text-info text-center'>"+error+"</h1>");	
+		}
+		catch(e){
+			setTimeout(function(){
+				console.warning(error);
+			},3000);
+		}*/
 		var favourites=self.getFavourites();
 		var total=favourites.length;
 		if(favourites.length<1)
@@ -173,36 +184,35 @@ function TextShadow(args){
 				var ul="<ul class='list-group fix'>";
 				var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_less'></span></div>"
 				+"<div class='col-md-6'><span class='glyphicon glyphicon-chevron-down pull-right show_more'></span></div></div>";
-				for(var i=0;i<total;i++)
-					if(i<10)
-						ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
-					else
-						ul+="<li class='list-group-item favourite_item no-display'>text-shadow:"+favourites[i]+";</li>";
+				for(var i=0;i<10;i++)
+					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
 				list_items=$(".favourite_item");
-				for(var i=10;i<total;i++)
-					$(list_items[i]).hide();
 				return ul;	
 			}
 			bootbox.alert(renderlist());
 			bind(".list-group","click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
 				$(this).addClass('active');
-			});
+			}); 
 			bind(".show_less","click",null,function(){
 				console.log("Total:"+favourites.length);
 			});
 			bind(".show_more","click",null,function(){
-				var list_items=$(" .favourite_item");
-				$(list_items).toggleClass("no-display");
-				/*for(var start=total-10;start<total;start++)
-					$(list_items[start]).removeClass("no-display");*/
+				var current_list="";
+				list_items=$(".favourite_item");
+				for(var i=index;i<total-(total-10);i++){
+					current_list+="<li class='list-group-item'>"+favourites[i]+"</li>";
+				}
+				$(".fix").html(current_list);
+				console.log(current_list);
+				index+=10;
 			});
 		}
 		return self;
 	};
 	self.downloadFavourites=function(){
-		var file="/********\n",blob;
+		var file="/********\n";
 		var items=self.getFavourites();
 		if(items.length<1)
 			return "No favourites found";
@@ -210,8 +220,7 @@ function TextShadow(args){
 			file+="text-shadow:"+items[i]+";\n";
 		file+="**************\n";
 		try{
-			blob=new Blob([file], {type: "text/plain;charset=utf-8"});
-			saveAs(blob,"favourites.css");	
+			saveAs(new Blob([file], {type: "text/plain;charset=utf-8"}),"favourites.css");	
 		}
 		catch(e){
 			alert("Filesaver is missing!!!");		
