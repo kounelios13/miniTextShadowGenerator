@@ -9,55 +9,19 @@
 	<script src="src/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src='src/bower_components/bootbox.js/bootbox.js'></script>
 	<script src="src/miniTextShadow.js"></script>
-	<style>
-	.fix{
-		margin-top: 8px;
-	}
-	.no-display{
-		display: none;
-	}
-	.upside{
-		transform:rotate(180deg);
-	}
-    </style>
 	<script>
 	var gen=new TextShadow("#sample").activateGenerator();
 	var list;
 	var ul;
 	$(function(){
-
+		
 		$("#button").on("click",function(){
 		var text="<h3 class='text-primary text-center'>text-shadow:"+gen.getCode()+";</h3>";
 			bootbox.alert(text);
 		});
-		$('#showFavourites').click(function(){
-			list=gen.getFavourites();
-			ul="<ul class='fix list-group'>\n";
-			var carrets="<div class='row'><div class='col-md-6'><b class='caret show_more pull-left'/></div>"
-			+"<div class='col-md-6'><b class='caret show_less pull-right'/></div></div>";
-			if(list.length<1)
-				for(var i=0;i<30;i++){
-					ul+="<li class='list-group-item'> Item no:"+(i+1)+".</li>";
-					list.push(i+1);
-				}
-			else	
-				for(var i=0,max=list.length;i<max;i++)
-					ul+="<li class='list-group-item'>text-shadow:"+list[i]+";</li>";
-			ul+="</ul>"+carrets;
-
-			var items=$(".fix .list-group-item");
-			for(var i=0;i<list.length- Math.floor(list.length % 10);i++)
-				$(items[i]).addClass("no-display");
-			bootbox.alert(ul);
-			return ul;
-		});
-		$(document).on("click"," .show_less",function(){
-			var current_total=list.length;
-			
-			
-		});
 	});
 	</script>
+	
 </head>
 <body>
 	<div class="container">
@@ -75,8 +39,9 @@
 		</div>
 		<div id="button"class="btn btn-info" >Get code</div>
 		<div class="btn btn-info" onclick="gen.addToFavourites()">Add to favourites</div>
-		<div class="btn btn-primary" id="showFavourites">Show Favourites</div>
+		<div class="btn btn-primary" onclick="gen.showFavourites()">Show Favourites</div>
 	</div>
+
 </body>
 
 </html>

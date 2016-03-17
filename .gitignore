@@ -5,6 +5,7 @@ ehthumbs.db
 # Folder config file
 Desktop.ini
 update_branch.bat
+src/favs.py
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
