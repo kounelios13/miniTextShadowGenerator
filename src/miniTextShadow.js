@@ -200,10 +200,13 @@ function TextShadow(args){
 					return;//there are no previous favourites when we hit 0
 				var min_value=index>9?index-10:0;
 				var list="";
-				for(var i=index;i<=min_value;i--)
+				console.log(min_value);
+				for(var i=min_value;i<index;i++)
+					//console.log(i);
 					list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
 				index=min_value;
-				$(".fix").html(current_list);
+				$(".fix").html(list);
+			
 			});
 			bind(".show_more","click",null,function(){
 				if(index>=favourites.length)
@@ -222,7 +225,11 @@ function TextShadow(args){
 					index+=10
 				else
 					index+=diff
-				$(".fix").html(current_list);
+				$(".fix").html(current_list).animate({
+					"top":"12px",
+					"box-shadow":"0 0 3px 4px dodgerblue"
+				},1200);
+				//$(".fix").html(current_list);
 				//console.log(current_list);
 			});
 		}
