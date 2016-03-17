@@ -196,7 +196,14 @@ function TextShadow(args){
 				$(this).addClass('active');
 			}); 
 			bind(".show_less","click",null,function(){
-				console.log("Total:"+favourites.length);
+				if(index==0)
+					return;//there are no previous favourites when we hit 0
+				var min_value=index>9?index-10:0;
+				var list="";
+				for(var i=index;i<=min_value;i--)
+					list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
+				index=min_value;
+				$(".fix").html(current_list);
 			});
 			bind(".show_more","click",null,function(){
 				if(index>=favourites.length)
