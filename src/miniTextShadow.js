@@ -166,14 +166,6 @@ function TextShadow(args){
 	self.showFavourites=function(){
 		var error="Function has not been implemented yet and it is not part of the public API!!!!";
 		var index=10;
-		/*try{
-			bootbox.alert("<h1 class='text-info text-center'>"+error+"</h1>");	
-		}
-		catch(e){
-			setTimeout(function(){
-				console.warning(error);
-			},3000);
-		}*/
 		var favourites=self.getFavourites();
 		var total=favourites.length;
 		if(favourites.length<1)
@@ -182,8 +174,8 @@ function TextShadow(args){
 			var list_items;
 			function renderlist(){				
 				var ul="<ul class='list-group fix'>";
-				var carrets="<div class='row'><div class='col-md-6'><span class='glyphicon glyphicon-chevron-up pull-left show_less'></span></div>"
-				+"<div class='col-md-6'><span class='glyphicon glyphicon-chevron-down pull-right show_more'></span></div></div>";
+				var carrets="<div class='row'><div class='col-md-6'><span class='btn btn-info pull-left show_less'>Show less</span></div>"
+				+"<div class='col-md-6'><span class='btn btn-info  pull-right show_more'>Show more</span></div></div>";
 				for(var i=0;i<10;i++)
 					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
@@ -200,13 +192,11 @@ function TextShadow(args){
 					return;//there are no previous favourites when we hit 0
 				var min_value=index>9?index-10:0;
 				var list="";
-				console.log(min_value);
 				for(var i=min_value;i<index;i++)
 					//console.log(i);
 					list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
 				index=min_value;
 				$(".fix").html(list);
-			
 			});
 			bind(".show_more","click",null,function(){
 				if(index>=favourites.length)
