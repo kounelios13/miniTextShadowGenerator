@@ -185,7 +185,6 @@ function TextShadow(args){
 		if(total<1)
 			bootbox.alert("No favourites  to show!!!");
 		else{
-			var list_items;
 			function renderlist(){
 				var ul="<ul class='list-group fix'>";
 				var carrets="<div class='col-md-12 text-center'><div class='btn-group'>"
@@ -196,7 +195,6 @@ function TextShadow(args){
 				for(var i=0;i<10;i++)
 					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
-				list_items=$(".favourite_item");
 				return ul;
 			}
 			bootbox.alert(renderlist());
@@ -218,13 +216,12 @@ function TextShadow(args){
 				if(index > 9)
 					min_value=index-10;
 				var current_items=favourites.slice(min_value,index);//Isolate the items we want to display into a new array
-				index=min_value;
+				index=min_value;//change global index variable
 				var list="";
 				for(var i=0,max=current_items.length;i<max;i++)
 						list+="<li class='list-group-item' >text-shadow:"+current_items[i]+";</li>";
-				$(".fix").html(list);//replace the contents of the list with the items we want to show
-
 			});
+			$(".fix").html(list);//replace the contents of the list with the items we want to show
 			bind(".show_more","click",null,function(){
 				if(index>=favourites.length)
 					return;//max items displayed so exit the function
