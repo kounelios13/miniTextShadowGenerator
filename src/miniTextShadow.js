@@ -1,5 +1,6 @@
 "use strict";
 var __version__='1.0.1';
+var download;
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
 	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,
@@ -62,9 +63,8 @@ function TextShadow(args){
 		"</div>"+
 	"</div> ";
 	self.host_id=null;
-	if(typeof args != 'string' || !args || args[0]=='.' || !args[0]=="#"){
+	if(typeof args != 'string' || !args || args[0]=='.' || !args[0]=="#")
 		throw new Error("Invalid id!!!"+args);
-	}
 	else
 		self.host_id=host=args;
 	self.shadow_code="none";
@@ -79,6 +79,7 @@ function TextShadow(args){
 			bind(document,"ready",null,function(){
 				self.content_backup=$(host).html();
 				$(host).html(self.generator_markup);
+				download=self.downloadFavourites;
 			});
 		return self;
 	};
@@ -163,68 +164,6 @@ function TextShadow(args){
 			self.favourites.length=0;
 		return self;
 	};
-	self.showFavourites=function(){
-		var error="Function has not been implemented yet and it is not part of the public API!!!!";
-		var index=10;
-		var favourites=self.getFavourites();
-		var total=favourites.length;
-		if(favourites.length<1)
-			bootbox.alert("No favourites  to show!!!");
-		else{
-			var list_items;
-			function renderlist(){				
-				var ul="<ul class='list-group fix'>";
-				var carrets="<div class='row'><div class='col-md-6'><span class='btn btn-info pull-left show_less'>Show less</span></div>"
-				+"<div class='col-md-6'><span class='btn btn-info  pull-right show_more'>Show more</span></div></div>";
-				for(var i=0;i<10;i++)
-					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
-				ul+="</ul>"+carrets;
-				list_items=$(".favourite_item");
-				return ul;	
-			}
-			bootbox.alert(renderlist());
-			bind(".list-group","click",".list-group-item",function(){
-				$(".list-group li").removeClass('active');
-				$(this).addClass('active');
-			}); 
-			bind(".show_less","click",null,function(){
-				if(index==0)
-					return;//there are no previous favourites when we hit 0
-				var min_value=index>9?index-10:0;
-				var list="";
-				for(var i=min_value;i<index;i++)
-					//console.log(i);
-					list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
-				index=min_value;
-				$(".fix").html(list);
-			});
-			bind(".show_more","click",null,function(){
-				if(index>=favourites.length)
-					return;//max items displayed so exit the function
-				var current_list="";
-				var total=favourites.length;
-				var diff=total-index;
-				var end;
-				if(diff > 9)
-					end=index+10;
-				else
-					end=index+diff;
-				for(var i=index;i<end;i++)
-					current_list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
-				if(diff>9)
-					index+=10
-				else
-					index+=diff
-				$(".fix").html(current_list).animate({
-					"top":"12px",
-					"box-shadow":"0 0 3px 4px dodgerblue"
-				},1200);
-				//$(".fix").html(current_list);
-				//console.log(current_list);
-			});
-		}
-		return self;
-	};
 	self.downloadFavourites=function(){
 		var file="/********\n";
 		var items=self.getFavourites();
@@ -240,5 +179,66 @@ function TextShadow(args){
 			alert("Filesaver is missing!!!");		
 		}
 	};
+	self.showFavourites=function(){
+		/*var error="Function has not been implemented yet and it is not part of the public API!!!!";*/
+		var index=10;
+		var favourites=self.getFavourites();
+		var total=favourites.length;
+		if(total<1)
+			bootbox.alert("No favourites  to show!!!");
+		else{
+			var list_items;
+			function renderlist(){				
+				var ul="<ul class='list-group fix'>";
+				var carrets="<div class='row'><div class='col-md-4'><span class='btn btn-info pull-left show_less'>Show less</span></div>"
+				+"<div class='col-md-4'><span class='btn btn-success download_button'>Download Favourites</span></div>"
+				+"<div class='col-md-4'><span class='btn btn-info  pull-right show_more'>Show more</span></div></div></div>";
+				for(var i=0;i<10;i++)
+					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
+				ul+="</ul>"+carrets;
+				list_items=$(".favourite_item");
+				return ul;	
+			}
+			bootbox.alert(renderlist());
+			bind('.modal-body',"click",'.download_button',function(){
+				self.downloadFavourites();
+			});
+			bind(".list-group","click",".list-group-item",function(){
+				$(".list-group li").removeClass('active');
+				$(this).addClass('active');
+			}); 
+			bind(".show_less","click",null,function(){
+				var min_value=index>9?index-10:0;//the item to begin from
+				var end=min_value+10;//the item to stop at
+				var list="";
+				index=min_value;
+				for(var i=min_value;i<end;i++)
+					list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
+				$(".fix").html(list);
+				
+			});
+			bind(".show_more","click",null,function(){
+				if(index>=favourites.length)
+					return;//max items displayed so exit the function
+				var current_list="";
+				var total=favourites.length;
+				var diff=total-index;
+				var end;//the item to stop at
+				if(diff > 9)
+					end=index+10;
+				else
+					end=index+diff;
+				for(var i=index;i<end;i++)
+					current_list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
+				if(diff>9)
+					index+=10
+				else
+					index+=diff
+				$(".fix").html(current_list);
+			});
+		}
+		return self;
+	};
+	
 	render();
 }
