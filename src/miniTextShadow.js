@@ -213,13 +213,17 @@ function TextShadow(args){
 			//Also if you press show less then you have to press show more twice to make it work
 			//So what the hell is wrong with this function?
 			bind(".show_less","click",null,function(){
-				var min_value=index>9?index-10:0;//the item to begin from
-				var end=min_value+10;//the item to stop at
-				var list="";
+				//Probably the index(min_value) is not right
+				var min_value=0;
+				if(index > 9)
+					min_value=index-10;
+				var current_items=favourites.slice(min_value,index);//Isolate the items we want to display into a new array
 				index=min_value;
-				for(var i=min_value;i<end;i++)
-					list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
-				$(".fix").html(list);
+				var list="";
+				for(var i=0,max=current_items.length;i<max;i++)
+						list+="<li class='list-group-item' >text-shadow:"+current_items[i]+";</li>";
+				$(".fix").html(list);//replace the contents of the list with the items we want to show
+
 			});
 			bind(".show_more","click",null,function(){
 				if(index>=favourites.length)
