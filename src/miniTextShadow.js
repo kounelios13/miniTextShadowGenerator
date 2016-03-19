@@ -15,7 +15,7 @@ function TextShadow(args){
 			if(item)
 				$(container).on(evnt,item,fn);
 			else
-				$(container).on(evnt,fn);	
+				$(container).on(evnt,fn);
 		});
 	}
 	var self=this;
@@ -128,7 +128,7 @@ function TextShadow(args){
 		if(isNaN(value) || !value || !limit)
 			throw new Error("An error occured.");
 		var value=abs(value);
-		switch(limit.toUpperCase()){	
+		switch(limit.toUpperCase()){
 			//we use for loop because we do not want to target every single slider
 			case "MIN":
 				for(var i=0;i<sliders.length-1;i++)
@@ -136,7 +136,7 @@ function TextShadow(args){
 				break;
 			default:
 				for(var i=0;i<sliders.length-1;i++)
-					$(sliders[i]).prop("max",value);	
+					$(sliders[i]).prop("max",value);
 		}//switch
 		return self;
 	};
@@ -173,10 +173,10 @@ function TextShadow(args){
 			file+="text-shadow:"+items[i]+";\n";
 		file+="**************\n";
 		try{
-			saveAs(new Blob([file], {type: "text/plain;charset=utf-8"}),"favourites.css");	
+			saveAs(new Blob([file], {type: "text/plain;charset=utf-8"}),"favourites.css");
 		}
 		catch(e){
-			alert("Filesaver is missing!!!");		
+			alert("Filesaver is missing!!!");
 		}
 	};
 	self.showFavourites=function(){
@@ -188,11 +188,8 @@ function TextShadow(args){
 			bootbox.alert("No favourites  to show!!!");
 		else{
 			var list_items;
-			function renderlist(){				
+			function renderlist(){
 				var ul="<ul class='list-group fix'>";
-				/*var carrets="<div class='row'><div class='col-md-4'><span class='btn btn-info show_less'>Show less</span></div>"
-				+"<div class='col-md-4'><span class='btn btn-success download_button'>Download Favourites</span></div>"
-				+"<div class='col-md-4'><span class='btn btn-info  pull-right '>Show more</span></div></div></div>";*/
 				var carrets="<div class='col-md-12 text-center'><div class='btn-group'>"
 				+"<div class='btn btn-info show_less'>Show less</div>"
 				+"<div class='btn btn-success download_button'>Download Favourites</div>"
@@ -202,7 +199,7 @@ function TextShadow(args){
 					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
 				list_items=$(".favourite_item");
-				return ul;	
+				return ul;
 			}
 			bootbox.alert(renderlist());
 			bind('.modal-body',"click",'.download_button',function(){
@@ -211,7 +208,10 @@ function TextShadow(args){
 			bind(".list-group","click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
 				$(this).addClass('active');
-			}); 
+			});
+			//Bugs
+			//you have to press twice the show_less button to show the previous 10 Favourites.
+			//Perhaps wrong computation of index variable
 			bind(".show_less","click",null,function(){
 				var min_value=index>9?index-10:0;//the item to begin from
 				var end=min_value+10;//the item to stop at
@@ -220,7 +220,6 @@ function TextShadow(args){
 				for(var i=min_value;i<end;i++)
 					list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
 				$(".fix").html(list);
-				
 			});
 			bind(".show_more","click",null,function(){
 				if(index>=favourites.length)
@@ -236,14 +235,14 @@ function TextShadow(args){
 				for(var i=index;i<end;i++)
 					current_list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
 				if(diff>9)
-					index+=10
+					index+=10;
 				else
-					index+=diff
+					index+=diff;
 				$(".fix").html(current_list);
 			});
 		}
 		return self;
 	};
-	
+
 	render();
 }
