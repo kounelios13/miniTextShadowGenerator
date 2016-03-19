@@ -11,12 +11,10 @@ function TextShadow(args){
 	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
 	function bind(container,evnt,item,fn){
-
 			if(item)
-				$(container).on(evnt,item,
+				$(container).on(evnt,item,fn);
 			else
 				$(container).on(evnt,fn);
-		});
 	}
 	var self=this;
 	var host=null;
@@ -213,6 +211,7 @@ function TextShadow(args){
 			//you have to press twice the show_less button to show the previous 10 Favourites.
 			//Perhaps wrong computation of index variable
 			//Also if you press show less then you have to press show more twice to make it work
+			//So what the hell is wrong with this function?
 			bind(".show_less","click",null,function(){
 				var min_value=index>9?index-10:0;//the item to begin from
 				var end=min_value+10;//the item to stop at
