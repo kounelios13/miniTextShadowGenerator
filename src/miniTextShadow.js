@@ -11,9 +11,9 @@ function TextShadow(args){
 	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
 	function bind(container,evnt,item,fn){
-		$(function(){
+
 			if(item)
-				$(container).on(evnt,item,fn);
+				$(container).on(evnt,item,
 			else
 				$(container).on(evnt,fn);
 		});
@@ -111,7 +111,7 @@ function TextShadow(args){
 			var color=val(color_sliders[3]) != '1'?"rgba("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+","+val(color_sliders[3])+")":"rgb("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+")";
 			self.shadow_code=val(sliders[0])+"px "+val(sliders[1])+"px ";
 			if(val(sliders[2])!= '0')
-				self.shadow_code+=val(sliders[2])+"px ";
+				self.shadow_code+=val(sliders[2])+"px ";//detect if the user wants to apply blur
 			self.shadow_code+=color;
 			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
 			$(host+ " .panel .text-shadow-output").css("text-shadow",self.shadow_code);
