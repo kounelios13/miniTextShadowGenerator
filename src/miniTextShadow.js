@@ -190,9 +190,14 @@ function TextShadow(args){
 			var list_items;
 			function renderlist(){				
 				var ul="<ul class='list-group fix'>";
-				var carrets="<div class='row'><div class='col-md-4'><span class='btn btn-info pull-left show_less'>Show less</span></div>"
+				/*var carrets="<div class='row'><div class='col-md-4'><span class='btn btn-info show_less'>Show less</span></div>"
 				+"<div class='col-md-4'><span class='btn btn-success download_button'>Download Favourites</span></div>"
-				+"<div class='col-md-4'><span class='btn btn-info  pull-right show_more'>Show more</span></div></div></div>";
+				+"<div class='col-md-4'><span class='btn btn-info  pull-right '>Show more</span></div></div></div>";*/
+				var carrets="<div class='col-md-12 text-center'><div class='btn-group'>"
+				+"<div class='btn btn-info show_less'>Show less</div>"
+				+"<div class='btn btn-success download_button'>Download Favourites</div>"
+				+"<div class='btn btn-info show_more'>Show more</div>"
+				+"</div></div>";
 				for(var i=0;i<10;i++)
 					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
