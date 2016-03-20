@@ -1,6 +1,5 @@
 "use strict";
 var __version__='1.0.1';
-var download;
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
 	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,
@@ -77,7 +76,6 @@ function TextShadow(args){
 			bind(document,"ready",null,function(){
 				self.content_backup=$(host).html();
 				$(host).html(self.generator_markup);
-				download=self.downloadFavourites;
 			});
 		return self;
 	};
@@ -88,7 +86,7 @@ function TextShadow(args){
 		var backup=self.getBackup();
 		if(!destination)
 			throw new Error("Wrong destination");
-		var isClass=destination[0]=='.';
+		var isClass=destination[0]=='.';//Detect if the user wants to restore the backup into multiple positions in the page
 		if(isClass){
 			var answer=confirm("You are going to create duplicates of your backed content.Are you sure you want to continue");
 			if(answer)
@@ -210,24 +208,32 @@ function TextShadow(args){
 			//Perhaps wrong computation of index variable
 			//Also if you press show less then you have to press show more twice to make it work
 			//So what the hell is wrong with this function?
+			//Someone must really hate me -_- :(
 			bind(".show_less","click",null,function(){
+				if(index == 0)
+					return;
 				//Probably the index(min_value) is not right
 				var min_value=0;
-				if(index > 9)
+				if(index > 19)
 					min_value=index-10;
 				var current_items=favourites.slice(min_value,index);//Isolate the items we want to display into a new array
-				index=min_value;//change global index variable
+				index=min_value;//change global index variable.Is that value correct though???
 				var list="";
+				console.log("List items as array-->"+current_items);
+				//iterate through the items we want to display
 				for(var i=0,max=current_items.length;i<max;i++)
 						list+="<li class='list-group-item' >text-shadow:"+current_items[i]+";</li>";
+				console.log("Markup:\n"+list);
+				$(".fix").html(list);//replace the contents of the list with the items we want to show
 			});
-			$(".fix").html(list);//replace the contents of the list with the items we want to show
+
 			bind(".show_more","click",null,function(){
 				if(index>=favourites.length)
 					return;//max items displayed so exit the function
 				var current_list="";
 				var total=favourites.length;
-				var diff=total-index;
+				var diff=total-index;//find how many items there are to display between the current index
+				//and the total amount of favourites
 				var end;//the item to stop at
 				if(diff > 9)
 					end=index+10;
@@ -244,6 +250,5 @@ function TextShadow(args){
 		}
 		return self;
 	};
-
 	render();
 }
