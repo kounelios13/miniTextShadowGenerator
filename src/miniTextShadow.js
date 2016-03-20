@@ -14,12 +14,6 @@ function isChainable(name){
 function TextShadow(args){
 	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
-	function bind(container,evnt,item,fn){
-			if(item)
-				$(container).on(evnt,item,fn);
-			else
-				$(container).on(evnt,fn);
-	}
 	var self=this;
 	var host=null;
 	self.generator_markup=""+
@@ -78,7 +72,7 @@ function TextShadow(args){
 	};
 	var render=function(){
 		if(host != null && host[0]=='#')
-			bind(document,"ready",null,function(){
+			$(document).on("ready",function(){
 				self.content_backup=$(host).html();
 				$(host).html(self.generator_markup);
 			});
@@ -106,18 +100,23 @@ function TextShadow(args){
 		return self.shadow_code;
 	};
 	self.activateGenerator=function(){
-		var code=self.getCode();
-		bind(host,"mousemove touchmove",null,function(){
-			var sliders=$(host+" .panel-body .text-shadow-sliders");
-			var color_sliders=$(host+" .panel-body .text-shadow-color-sliders");
-			var color=val(color_sliders[3]) != '1'?"rgba("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+","+val(color_sliders[3])+")":"rgb("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+")";
-			self.shadow_code=val(sliders[0])+"px "+val(sliders[1])+"px ";
-			if(val(sliders[2])!= '0')
-			//detect if the user wants to apply blur
-				self.shadow_code+=val(sliders[2])+"px ";
-			self.shadow_code+=color;
-			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
-			$(host+ " .panel .text-shadow-output").css("text-shadow",self.shadow_code);
+		$(document).ready(function(){
+			$(host).on("mousemove touchmove","input[type=range]",function(){
+				var sliders=$(".text-shadow-sliders");
+				var colors=$(".text-shadow-color-sliders");
+				//Create a text shadow code with default color(I think black)
+				var code=val(sliders[0])+"px "+val(sliders[1])+"px ";
+				//Now let's see if the user applied blur
+				if(val(sliders[2]) != '0')
+					code+=val(sliders[2])+"px ";//leave a whitespace to add the color
+				//Determine the color of the shadow_code and its mode(rgb or rgba)
+				var isRgba=val(colors[3]) != '1';
+				var color=isRgba?"rgba("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+","+val(colors[3])+")":"rgb("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+")";
+				code+=color;
+				self.shadow_code=code;
+				$(".text-shadow-output").css("text-shadow",code);
+				$(".text-shadow-code-output").text("text-shadow:"+code+";");
+			});
 		});
 		return self;
 	};
@@ -203,10 +202,8 @@ function TextShadow(args){
 				return ul;
 			}
 			bootbox.alert(renderlist());
-			bind('.modal-body',"click",'.download_button',function(){
-				self.downloadFavourites();
-			});
-			bind(".list-group","click",".list-group-item",function(){
+			$('.modal-body').on("click",".download_button",self.downloadFavourites);
+			$(".list-group").on("click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
 				$(this).addClass('active');
 			});
@@ -216,9 +213,9 @@ function TextShadow(args){
 			//Also if you press show less then you have to press show more twice to make it work
 			//So what the hell is wrong with this function?
 			//Someone must really hate me -_- :(
-			bind(".show_less","click",null,function(){
+			$(".show_less").on("click",function(){
 				if(index == 0)
-					return;
+				return;
 				//Probably the index(min_value) is not right
 				var min_value=0;
 				if(index > 19)
@@ -234,7 +231,7 @@ function TextShadow(args){
 				$(".fix").html(list);//replace the contents of the list with the items we want to show
 			});
 
-			bind(".show_more","click",null,function(){
+			$(".show_more").on("click",function(){
 				if(index>=favourites.length)
 					return;//max items displayed so exit the function
 				var current_list="";
