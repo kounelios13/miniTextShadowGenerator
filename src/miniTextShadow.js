@@ -1,3 +1,8 @@
+/*
+	If you are looking at this source code you have to be a psycho!!!!!!!!!
+	Seriously.There are many bugs to solve and it's pissing me off
+	I need to take a break.Time wasted here-->Infinite
+*/
 "use strict";
 var __version__='1.0.1';
 function isChainable(name){
@@ -58,7 +63,7 @@ function TextShadow(args){
 		" </div> <!-- /panel-body --> "+
 			" <div class='panel-heading text-center text-shadow-code-output'>text-shadow:0px 0px rgb(0,0,0);</div>  "+
 		"</div>"+
-	"</div> ";
+	"</div>";
 	self.host_id=null;
 	if(typeof args != 'string' || !args || args[0]=='.' || !args[0]=="#")
 		throw new Error("Invalid id!!!"+args);
@@ -86,7 +91,8 @@ function TextShadow(args){
 		var backup=self.getBackup();
 		if(!destination)
 			throw new Error("Wrong destination");
-		var isClass=destination[0]=='.';//Detect if the user wants to restore the backup into multiple positions in the page
+		//Detect if the user wants to restore the backup into multiple positions in the page
+		var isClass=destination[0]=='.';
 		if(isClass){
 			var answer=confirm("You are going to create duplicates of your backed content.Are you sure you want to continue");
 			if(answer)
@@ -107,7 +113,8 @@ function TextShadow(args){
 			var color=val(color_sliders[3]) != '1'?"rgba("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+","+val(color_sliders[3])+")":"rgb("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+")";
 			self.shadow_code=val(sliders[0])+"px "+val(sliders[1])+"px ";
 			if(val(sliders[2])!= '0')
-				self.shadow_code+=val(sliders[2])+"px ";//detect if the user wants to apply blur
+			//detect if the user wants to apply blur
+				self.shadow_code+=val(sliders[2])+"px ";
 			self.shadow_code+=color;
 			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
 			$(host+ " .panel .text-shadow-output").css("text-shadow",self.shadow_code);
@@ -250,5 +257,6 @@ function TextShadow(args){
 		}
 		return self;
 	};
+	//After everything is ok render the app
 	render();
 }
