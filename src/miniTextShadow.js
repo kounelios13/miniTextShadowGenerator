@@ -131,7 +131,7 @@ function TextShadow(args){
 			throw new Error("An error occured.");
 		var value=abs(value);
 		switch(limit.toUpperCase()){
-			//we use for loop because we do not want to target every single slider
+			//we use for loop because we do not want to select every single slider
 			case "MIN":
 				for(var i=0;i<sliders.length-1;i++)
 					$(sliders[i]).prop("min",value * -1);
@@ -208,22 +208,16 @@ function TextShadow(args){
 				$(this).addClass('active');
 			});
 			$(".show_less").on("click",function(){
-				if(index == 0)
-				return;
-				var min_value=0;
-				if(index > 9)
-					min_value=index-10;
-				var current_items=favourites.slice(min_value-10,index-10);//somehow i solved the fucking bug.nope bitch!!!
-				//Isolate the items we want to display into a new array
-				index=min_value;//change global index variable.Is that value correct though???
+				if(index==0)
+					return;
+				var min_value=index>9?index-10:0;
+				var selected_items=favourites.slice(min_value,index);
 				var list="";
-				console.log("List items as array-->"+current_items);
-				//iterate through the items we want to display
-				for(var i=0,max=current_items.length;i<max;i++)
-						list+="<li class='list-group-item' >text-shadow:"+current_items[i]+";</li>";
-				console.log("Markup:\n"+list);
-				if(list.length > 0)
-					$(".fix").html(list);//replace the contents of the list with the items we want to show only if there is at least one to display
+				for(var i=0,max=selected_items.length;i<max;i++)
+					list+="<li class='list-group-item'>text-shadow:"+selected_items[i]+";</li>";
+				index=min_value;	
+				$('.fix').html(list);
+				console.log(selected_items);
 			});
 			$(".show_more").on("click",function(){
 				if(index>=favourites.length)
