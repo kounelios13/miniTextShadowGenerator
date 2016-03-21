@@ -66,7 +66,7 @@ function TextShadow(args){
 	self.shadow_code="none";
 	self.content_backup=null;
 	self.favourites=[];
-	for(var i=1;i<=30;i++)self.favourites.push(i);
+	for(var i=1;i<=60;i++)self.favourites.push(i);
 	self.getId=function(){
 		return self.host_id;
 	};
@@ -218,9 +218,10 @@ function TextShadow(args){
 				return;
 				//Probably the index(min_value) is not right
 				var min_value=0;
-				if(index > 19)
+				if(index > 9)
 					min_value=index-10;
-				var current_items=favourites.slice(min_value,index);//Isolate the items we want to display into a new array
+				var current_items=favourites.slice(min_value-10,index-10);//somehow i solved the fucking bug
+				//Isolate the items we want to display into a new array
 				index=min_value;//change global index variable.Is that value correct though???
 				var list="";
 				console.log("List items as array-->"+current_items);
