@@ -1,6 +1,5 @@
 "use strict";
 var __version__='1.0.1';
-var download;
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
 	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,
@@ -10,12 +9,6 @@ function isChainable(name){
 function TextShadow(args){
 	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
-	function bind(container,evnt,item,fn){
-			if(item)
-				$(container).on(evnt,item,fn);
-			else
-				$(container).on(evnt,fn);
-	}
 	var self=this;
 	var host=null;
 	self.generator_markup=""+
@@ -59,7 +52,7 @@ function TextShadow(args){
 		" </div> <!-- /panel-body --> "+
 			" <div class='panel-heading text-center text-shadow-code-output'>text-shadow:0px 0px rgb(0,0,0);</div>  "+
 		"</div>"+
-	"</div> ";
+	"</div>";
 	self.host_id=null;
 	if(typeof args != 'string' || !args || args[0]=='.' || !args[0]=="#")
 		throw new Error("Invalid id!!!"+args);
@@ -68,16 +61,14 @@ function TextShadow(args){
 	self.shadow_code="none";
 	self.content_backup=null;
 	self.favourites=[];
-	for(var i=1;i<=30;i++)self.favourites.push(i);
 	self.getId=function(){
 		return self.host_id;
 	};
 	var render=function(){
 		if(host != null && host[0]=='#')
-			bind(document,"ready",null,function(){
+			$(document).on("ready",function(){
 				self.content_backup=$(host).html();
 				$(host).html(self.generator_markup);
-				download=self.downloadFavourites;
 			});
 		return self;
 	};
@@ -88,6 +79,7 @@ function TextShadow(args){
 		var backup=self.getBackup();
 		if(!destination)
 			throw new Error("Wrong destination");
+		//Detect if the user wants to restore the backup into multiple positions in the page
 		var isClass=destination[0]=='.';
 		if(isClass){
 			var answer=confirm("You are going to create duplicates of your backed content.Are you sure you want to continue");
@@ -102,17 +94,23 @@ function TextShadow(args){
 		return self.shadow_code;
 	};
 	self.activateGenerator=function(){
-		var code=self.getCode();
-		bind(host,"mousemove touchmove",null,function(){
-			var sliders=$(host+" .panel-body .text-shadow-sliders");
-			var color_sliders=$(host+" .panel-body .text-shadow-color-sliders");
-			var color=val(color_sliders[3]) != '1'?"rgba("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+","+val(color_sliders[3])+")":"rgb("+val(color_sliders[0])+","+val(color_sliders[1])+","+val(color_sliders[2])+")";
-			self.shadow_code=val(sliders[0])+"px "+val(sliders[1])+"px ";
-			if(val(sliders[2])!= '0')
-				self.shadow_code+=val(sliders[2])+"px ";//detect if the user wants to apply blur
-			self.shadow_code+=color;
-			$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
-			$(host+ " .panel .text-shadow-output").css("text-shadow",self.shadow_code);
+		$(document).ready(function(){
+			$(host).on("mousemove touchmove","input[type=range]",function(){
+				var sliders=$(".text-shadow-sliders");
+				var colors=$(".text-shadow-color-sliders");
+				//Create a text shadow code with default color(I think black)
+				var code=val(sliders[0])+"px "+val(sliders[1])+"px ";
+				//Now let's see if the user applied blur
+				if(val(sliders[2]) != '0')
+					code+=val(sliders[2])+"px ";//leave a whitespace to add the color
+				//Determine the color of the shadow_code and its mode(rgb or rgba)
+				var isRgba=val(colors[3]) != '1';
+				var color=isRgba?"rgba("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+","+val(colors[3])+")":"rgb("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+")";
+				code+=color;
+				self.shadow_code=code;
+				$(".text-shadow-output").css("text-shadow",code);
+				$(".text-shadow-code-output").text("text-shadow:"+code+";");
+			});
 		});
 		return self;
 	};
@@ -127,7 +125,7 @@ function TextShadow(args){
 			throw new Error("An error occured.");
 		var value=abs(value);
 		switch(limit.toUpperCase()){
-			//we use for loop because we do not want to target every single slider
+			//we use for loop because we do not want to select every single slider
 			case "MIN":
 				for(var i=0;i<sliders.length-1;i++)
 					$(sliders[i]).prop("min",value * -1);
@@ -185,7 +183,6 @@ function TextShadow(args){
 		if(total<1)
 			bootbox.alert("No favourites  to show!!!");
 		else{
-			var list_items;
 			function renderlist(){
 				var ul="<ul class='list-group fix'>";
 				var carrets="<div class='col-md-12 text-center'><div class='btn-group'>"
@@ -193,44 +190,39 @@ function TextShadow(args){
 				+"<div class='btn btn-success download_button'>Download Favourites</div>"
 				+"<div class='btn btn-info show_more'>Show more</div>"
 				+"</div></div>";
-				for(var i=0;i<10;i++)
+				var max_items=total > 9?10:total;//Wanna show the first 10 items.If there are less than 10 don't show the first 10
+				for(var i=0;i<max_items;i++)
 					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
-				list_items=$(".favourite_item");
 				return ul;
 			}
 			bootbox.alert(renderlist());
-			bind('.modal-body',"click",'.download_button',function(){
-				self.downloadFavourites();
-			});
-			bind(".list-group","click",".list-group-item",function(){
+			$('.modal-body').on("click",".download_button",self.downloadFavourites);
+			$(".list-group").on("click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
 				$(this).addClass('active');
 			});
-			//Bugs
-			//you have to press twice the show_less button to show the previous 10 Favourites.
-			//Perhaps wrong computation of index variable
-			//Also if you press show less then you have to press show more twice to make it work
-			//So what the hell is wrong with this function?
-			bind(".show_less","click",null,function(){
-				//Probably the index(min_value) is not right
-				var min_value=0;
-				if(index > 9)
-					min_value=index-10;
-				var current_items=favourites.slice(min_value,index);//Isolate the items we want to display into a new array
-				index=min_value;
+			$(".show_less").on("click",function(){
+				"use strict";
+				if(index==0)
+					return;
+				var min_value=index>9?index-10:0;
+				var selected_items=favourites.slice(min_value,index);
 				var list="";
-				for(var i=0,max=current_items.length;i<max;i++)
-						list+="<li class='list-group-item' >text-shadow:"+current_items[i]+";</li>";
-				$(".fix").html(list);//replace the contents of the list with the items we want to show
-
+				for(var i=0,max=selected_items.length;i<max;i++)
+					list+="<li class='list-group-item'>text-shadow:"+selected_items[i]+";</li>";
+				index=min_value;
+				$('.fix').html(list);
+				console.log(selected_items);
 			});
-			bind(".show_more","click",null,function(){
+			$(".show_more").on("click",function(){
+				"use strict";
 				if(index>=favourites.length)
 					return;//max items displayed so exit the function
 				var current_list="";
 				var total=favourites.length;
-				var diff=total-index;
+				var diff=total-index;//find how many items there are to display between the current index
+				//and the total amount of favourites
 				var end;//the item to stop at
 				if(diff > 9)
 					end=index+10;
@@ -247,6 +239,6 @@ function TextShadow(args){
 		}
 		return self;
 	};
-
+	//After everything is ok render the app
 	render();
 }
