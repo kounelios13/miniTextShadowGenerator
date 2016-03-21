@@ -66,7 +66,7 @@ function TextShadow(args){
 	self.shadow_code="none";
 	self.content_backup=null;
 	self.favourites=[];
-	for(var i=1;i<=60;i++)self.favourites.push(i);
+	for(var i=1;i<=13;i++)self.favourites.push(i);
 	self.getId=function(){
 		return self.host_id;
 	};
@@ -207,20 +207,13 @@ function TextShadow(args){
 				$(".list-group li").removeClass('active');
 				$(this).addClass('active');
 			});
-			//Bugs
-			//you have to press twice the show_less button to show the previous 10 Favourites.
-			//Perhaps wrong computation of index variable
-			//Also if you press show less then you have to press show more twice to make it work
-			//So what the hell is wrong with this function?
-			//Someone must really hate me -_- :(
 			$(".show_less").on("click",function(){
 				if(index == 0)
 				return;
-				//Probably the index(min_value) is not right
 				var min_value=0;
 				if(index > 9)
 					min_value=index-10;
-				var current_items=favourites.slice(min_value-10,index-10);//somehow i solved the fucking bug
+				var current_items=favourites.slice(min_value-10,index-10);//somehow i solved the fucking bug.nope bitch!!!
 				//Isolate the items we want to display into a new array
 				index=min_value;//change global index variable.Is that value correct though???
 				var list="";
@@ -229,9 +222,9 @@ function TextShadow(args){
 				for(var i=0,max=current_items.length;i<max;i++)
 						list+="<li class='list-group-item' >text-shadow:"+current_items[i]+";</li>";
 				console.log("Markup:\n"+list);
-				$(".fix").html(list);//replace the contents of the list with the items we want to show
+				if(list.length > 0)
+					$(".fix").html(list);//replace the contents of the list with the items we want to show only if there is at least one to display
 			});
-
 			$(".show_more").on("click",function(){
 				if(index>=favourites.length)
 					return;//max items displayed so exit the function
