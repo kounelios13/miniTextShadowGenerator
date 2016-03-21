@@ -1,8 +1,3 @@
-/*
-	If you are looking at this source code you have to be a psycho!!!!!!!!!
-	Seriously.There are many bugs to solve and it's pissing me off
-	I need to take a break.Time wasted here-->Infinite
-*/
 "use strict";
 var __version__='1.0.1';
 function isChainable(name){
@@ -66,7 +61,6 @@ function TextShadow(args){
 	self.shadow_code="none";
 	self.content_backup=null;
 	self.favourites=[];
-	for(var i=1;i<=13;i++)self.favourites.push(i);
 	self.getId=function(){
 		return self.host_id;
 	};
@@ -196,7 +190,8 @@ function TextShadow(args){
 				+"<div class='btn btn-success download_button'>Download Favourites</div>"
 				+"<div class='btn btn-info show_more'>Show more</div>"
 				+"</div></div>";
-				for(var i=0;i<10;i++)
+				var max_items=total > 9?10:total;//Wanna show the first 10 items.If there are less than 10 don't show the first 10
+				for(var i=0;i<max_items;i++)
 					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
 				ul+="</ul>"+carrets;
 				return ul;
@@ -208,6 +203,7 @@ function TextShadow(args){
 				$(this).addClass('active');
 			});
 			$(".show_less").on("click",function(){
+				"use strict";
 				if(index==0)
 					return;
 				var min_value=index>9?index-10:0;
@@ -215,11 +211,12 @@ function TextShadow(args){
 				var list="";
 				for(var i=0,max=selected_items.length;i<max;i++)
 					list+="<li class='list-group-item'>text-shadow:"+selected_items[i]+";</li>";
-				index=min_value;	
+				index=min_value;
 				$('.fix').html(list);
 				console.log(selected_items);
 			});
 			$(".show_more").on("click",function(){
+				"use strict";
 				if(index>=favourites.length)
 					return;//max items displayed so exit the function
 				var current_list="";
