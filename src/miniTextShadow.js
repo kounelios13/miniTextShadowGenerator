@@ -3,7 +3,7 @@ var __version__='1.0.1';
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
 	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,
-	"getBackup":false,"restoreBackup":false};
+	"showFavourites":true,"getBackup":false,"restoreBackup":false};
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
 function TextShadow(args){
@@ -119,7 +119,6 @@ function TextShadow(args){
 		return self;
 	};
 	self.setAxisValues=function(limit,value){
-		//more validations to come here
 		var sliders=$(host+" .text-shadow-sliders");
 		if(isNaN(value) || !value || !limit)
 			throw new Error("An error occured.");
@@ -147,6 +146,8 @@ function TextShadow(args){
 	};
 	self.addToFavourites=function(append){
 		var code=self.getCode();
+		//Checkif the current shadow is in the favourites list
+		//If it is not add it
 		if(self.favourites.indexOf(code)== -1 && code != "none")
 			self.favourites.push(code);
 		return self;
@@ -176,7 +177,6 @@ function TextShadow(args){
 		}
 	};
 	self.showFavourites=function(){
-		/*var error="Function has not been implemented yet and it is not part of the public API!!!!";*/
 		var index=10;
 		var favourites=self.getFavourites();
 		var total=favourites.length;
@@ -187,7 +187,8 @@ function TextShadow(args){
 				var ul="<ul class='list-group fix'>";
 				var carrets="<div class='col-md-12 text-center'><div class='btn-group'>"
 				+"<div class='btn btn-info show_less'>Show less</div>"
-				+"<div class='btn btn-success download_button'>Download Favourites</div>"
+				+"<div class='btn btn-success download_button'>Download Favourites"
+				+"<span class='pull-right glyphicon glyphicon-download-alt' style='margin-left:4px'></span></div>"
 				+"<div class='btn btn-info show_more'>Show more</div>"
 				+"</div></div>";
 				var max_items=total > 9?10:total;//Wanna show the first 10 items.If there are less than 10 don't show the first 10
@@ -200,6 +201,15 @@ function TextShadow(args){
 			$('.modal-body').on("click",".download_button",self.downloadFavourites);
 			$(".list-group").on("click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
+				//in progress.............................
+				var current_shadow=$(this).text();
+				var values=current_shadow.split(":")[1];
+				var colors=values.split("(")[1].split(")")[0];
+				var shadow_values=values.split("(")[0];
+				shadow_values=shadow_values.match(/\d+/g);
+				var shadow_sliders=$('.text-shadow-sliders');
+				for(var i=0;i<shadow_sliders.length;i++)
+					$(shadow_sliders[i]).val(shadow_values[i]);
 				$(this).addClass('active');
 			});
 			$(".show_less").on("click",function(){
@@ -230,10 +240,7 @@ function TextShadow(args){
 					end=index+diff;
 				for(var i=index;i<end;i++)
 					current_list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
-				if(diff>9)
-					index+=10;
-				else
-					index+=diff;
+				index=end;//The index to begin display more/less from
 				$(".fix").html(current_list);
 			});
 		}
