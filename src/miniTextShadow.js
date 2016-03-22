@@ -173,7 +173,9 @@ function TextShadow(args){
 			saveAs(new Blob([file], {type: "text/plain;charset=utf-8"}),"favourites.css");
 		}
 		catch(e){
-			alert("Filesaver is missing!!!");
+			var error_markup="<div class='alert alert-danger' role='alert' style='margin-top:8px'><strong>Filesaver</strong> is missing"+
+			".Can't download favourites</div><p class='text-warning'>Without Filesaver we are not able to access the filesystem</p>";
+			bootbox.alert(error_markup);
 		}
 	};
 	self.showFavourites=function(){
