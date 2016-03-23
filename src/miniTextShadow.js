@@ -58,7 +58,7 @@ function TextShadow(args){
 		throw new Error("Invalid id!!!"+args);
 	else
 		self.host_id=host=args;
-	self.shadow_code="none";
+	var code="none";
 	self.content_backup=null;
 	self.favourites=[];
 	self.getId=function(){
@@ -82,16 +82,17 @@ function TextShadow(args){
 		//Detect if the user wants to restore the backup into multiple positions in the page
 		var isClass=destination[0]=='.';
 		if(isClass){
-			var answer=confirm("You are going to create duplicates of your backed content.Are you sure you want to continue");
-			if(answer)
-				$(destination).html(backup);
+			bootbox.confirm("You are going to create duplicates of your backed content.Are you sure you want to continue",function(answer){
+				if(answer)
+					$(destination).html(backup);
+			});
 		}
 		else
 			$(destination).html(backup);
 		return self;
 	};
 	self.getCode=function(){
-		return self.shadow_code;
+		return code;
 	};
 	self.activateGenerator=function(){
 		$(document).ready(function(){
@@ -99,7 +100,7 @@ function TextShadow(args){
 				var sliders=$(".text-shadow-sliders");
 				var colors=$(".text-shadow-color-sliders");
 				//Create a text shadow code with default color(I think black)
-				var code=val(sliders[0])+"px "+val(sliders[1])+"px ";
+				code=val(sliders[0])+"px "+val(sliders[1])+"px ";
 				//Now let's see if the user applied blur
 				if(val(sliders[2]) != '0')
 					code+=val(sliders[2])+"px ";//leave a whitespace to add the color
@@ -107,7 +108,6 @@ function TextShadow(args){
 				var isRgba=val(colors[3]) != '1';
 				var color=isRgba?"rgba("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+","+val(colors[3])+")":"rgb("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+")";
 				code+=color;
-				self.shadow_code=code;
 				$(".text-shadow-output").css("text-shadow",code);
 				$(".text-shadow-code-output").text("text-shadow:"+code+";");
 			});
@@ -139,13 +139,13 @@ function TextShadow(args){
 		$(host+" .text-shadow-sliders").val(0);
 		$(host+" .text-shadow-color-sliders").val(0);
 		$(host+" .opacity").val(1);
-		self.shadow_code="0px 0px rgb(0,0,0)";
-		$(host+ " .text-shadow-code-output").text("text-shadow:"+self.shadow_code+";");
+		code="0px 0px rgb(0,0,0)";
+		$(host+ " .text-shadow-code-output").text("text-shadow:"+code+";");
 		$(host+ " .panel .text-shadow-output").css("text-shadow","none");
 		return self;
 	};
 	self.addToFavourites=function(append){
-		var code=self.getCode();
+
 		//Checkif the current shadow is in the favourites list
 		//If it is not add it
 		if(self.favourites.indexOf(code)== -1 && code != "none")
@@ -156,9 +156,13 @@ function TextShadow(args){
 		return self.favourites;
 	};
 	self.removeFavourites=function(){
-		var del;
-		if( del=confirm("Are you sure you want to erase your favourites?"))
-			self.favourites.length=0;
+		if(self.favourites.length > 0)
+			bootbox.confirm("Are you sure you want to erase your favourites?",function(del){
+				if(del)
+					self.favourites.length=0;
+		});
+		else
+			bootbox.alert("There are no favourites to remove.");
 		return self;
 	};
 	self.downloadFavourites=function(){
@@ -225,7 +229,6 @@ function TextShadow(args){
 					list+="<li class='list-group-item'>text-shadow:"+selected_items[i]+";</li>";
 				index=min_value;
 				$('.fix').html(list);
-				console.log(selected_items);
 			});
 			$(".show_more").on("click",function(){
 				"use strict";
