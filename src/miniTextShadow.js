@@ -165,23 +165,6 @@ function TextShadow(args){
 			bootbox.alert("There are no favourites to remove.");
 		return self;
 	};
-	self.downloadFavourites=function(){
-		var file="/********\n";
-		var items=self.getFavourites();
-		if(items.length<1)
-			return "No favourites found";
-		for(var i=0;i<items.length;i++)
-			file+="text-shadow:"+items[i]+";\n";
-		file+="**************\n";
-		try{
-			saveAs(new Blob([file], {type: "text/plain;charset=utf-8"}),"favourites.css");
-		}
-		catch(e){
-			var error_markup="<div class='alert alert-danger' role='alert' style='margin-top:8px'><strong>Filesaver</strong> is missing"+
-			".Can't download favourites</div><p class='text-warning'>Without Filesaver we are not able to access the filesystem</p>";
-			bootbox.alert(error_markup);
-		}
-	};
 	self.showFavourites=function(){
 		var index=10;
 		var favourites=self.getFavourites();
@@ -204,7 +187,23 @@ function TextShadow(args){
 				return ul;
 			}
 			bootbox.alert(renderlist());
-			$('.modal-body').on("click",".download_button",self.downloadFavourites);
+			$('.modal-body').on("click",".download_button",function(){
+				var file="/********\n";
+				var items=self.getFavourites();
+				if(items.length<1)
+					return "No favourites found";
+				for(var i=0;i<items.length;i++)
+					file+="text-shadow:"+items[i]+";\n";
+				file+="**************\n";
+				try{
+					saveAs(new Blob([file], {type: "text/plain;charset=utf-8"}),"favourites.css");
+				}
+				catch(e){
+					var error_markup="<div class='alert alert-danger' role='alert' style='margin-top:8px'><strong>Filesaver</strong> is missing"+
+					".Can't download favourites</div><p class='text-warning'>Without Filesaver we are not able to access the filesystem</p>";
+					bootbox.alert(error_markup);
+				}
+			});
 			$(".list-group").on("click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
 				//in progress.............................
