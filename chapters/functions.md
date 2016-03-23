@@ -14,3 +14,4 @@ Adds the current text-shadow to the favourites list of the TextShadow object tha
 ###removeFavourites()
 Removes  the favourites list of the TextShadow object that called it.Chainable:Yes
 ###showFavourites()
+Displays a panel with the current favourites.Only the first 10 items are displayed.If you want to see more press the "Show more" button.If you want to see less just press the "Show less" button.You can download your favourites list by pressing Download Favourites(requires FileSaver.js).Chainable:Yes
