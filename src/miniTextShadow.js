@@ -99,8 +99,9 @@ function TextShadow(args){
 	self.activateGenerator=function(){
 		$(document).ready(function(){
 			$(host).on("mousemove touchmove","input[type=range]",function(){
-				var sliders=$(".text-shadow-sliders");
-				var colors=$(".text-shadow-color-sliders");
+				var host=self.getId();
+				var sliders=$(host+" .text-shadow-sliders");
+				var colors=$(host+" .text-shadow-color-sliders");
 				//Create a text shadow code with default color(I think black)
 				code=val(sliders[0])+"px "+val(sliders[1])+"px ";
 				//Now let's see if the user applied blur
@@ -110,8 +111,8 @@ function TextShadow(args){
 				var isRgba=val(colors[3]) != '1';
 				var color=isRgba?"rgba("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+","+val(colors[3])+")":"rgb("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+")";
 				code+=color;
-				$(".text-shadow-output").css("text-shadow",code);
-				$(".text-shadow-code-output").text("text-shadow:"+code+";");
+				$(host+" .text-shadow-output").css("text-shadow",code);
+				$(host+" .text-shadow-code-output").text("text-shadow:"+code+";");
 			});
 		});
 		return self;
@@ -146,7 +147,7 @@ function TextShadow(args){
 		$(host+ " .panel .text-shadow-output").css("text-shadow","none");
 		return self;
 	};
-	self.addToFavourites=function(append){
+	self.addToFavourites=function(){
 		//Checkif the current shadow is in the favourites list
 		//If it is not add it
 		if(self.favourites.indexOf(code)== -1 && code != "none")
@@ -265,9 +266,11 @@ function TextShadow(args){
 				$(".fix").html(current_list);
 			});
 		}
-		generators.push(self);
+
 		return self;
 	};
+	generators.push(self);
+	//self.activateGenerator();
 	//After everything is ok render the app
 	render();
 }

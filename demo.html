@@ -11,18 +11,19 @@
 	<script src='src/bower_components/Filesaver.js/Filesaver.min.js'></script>
 	<script src="src/miniTextShadow.js"></script>
 	<script>
-	var gen=new TextShadow("#sample").activateGenerator();
+	var gen=new TextShadow("#sample");
+	var a=new TextShadow("#sample_2");
 	var list;
 	var ul;
 	$(function(){
-		
+
 		$("#button").on("click",function(){
 		var text="<h3 class='text-primary text-center'>text-shadow:"+gen.getCode()+";</h3>";
 			bootbox.alert(text);
 		});
 	});
 	</script>
-	
+
 </head>
 <body>
 	<div class="container">
@@ -41,6 +42,8 @@
 		<div id="button"class="btn btn-info" >Get code</div>
 		<div class="btn btn-info" onclick="gen.addToFavourites()">Add to favourites</div>
 		<div class="btn btn-primary" onclick="gen.showFavourites()">Show Favourites</div>
+		<hr>
+		<div id="sample_2"></div>
 	</div>
 
 </body>
