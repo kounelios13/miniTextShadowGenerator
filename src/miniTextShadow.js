@@ -1,9 +1,11 @@
 "use strict";
 var __version__='1.0.1';
+var generators=[];//Keep track of all TextShadow objects in a page
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
-	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,
-	"showFavourites":true,"getBackup":false,"restoreBackup":false};
+	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,
+	"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,
+	"getAllFavourites":false,"showFavourites":true,"getBackup":false,"restoreBackup":false};
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
 function TextShadow(args){
@@ -145,7 +147,6 @@ function TextShadow(args){
 		return self;
 	};
 	self.addToFavourites=function(append){
-
 		//Checkif the current shadow is in the favourites list
 		//If it is not add it
 		if(self.favourites.indexOf(code)== -1 && code != "none")
@@ -154,6 +155,19 @@ function TextShadow(args){
 	};
 	self.getFavourites=function(){
 		return self.favourites;
+	};
+	self.getAllFavourites=function(){
+		var all_favs=[];
+		for(var i=0,max=generators.length;i<max;i++){
+			var current_generator_list=generators[i].getFavourites();
+			for(var j=0,inner_max=current_generator_list.length;j<inner_max;j++){
+				var current_code=current_generator_list[j];
+				//Avoid duplicates
+				if(all_favs.indexOf(current_code)==-1)
+					all_favs.push(current_code);
+			}//j
+		}//i
+		return all_favs;
 	};
 	self.removeFavourites=function(){
 		if(self.favourites.length > 0)
@@ -206,7 +220,6 @@ function TextShadow(args){
 			});
 			$(".list-group").on("click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
-				//in progress.............................
 				var current_shadow=$(this).text();
 				var values=current_shadow.split(":")[1];
 				var colors=values.split("(")[1].split(")")[0];
@@ -215,6 +228,10 @@ function TextShadow(args){
 				var shadow_sliders=$('.text-shadow-sliders');
 				for(var i=0;i<shadow_sliders.length;i++)
 					$(shadow_sliders[i]).val(shadow_values[i]);
+				var isRgba=colors.length==4;
+				var color=isRgba?"rgba("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+","+val(colors[3])+")":"rgb("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+")";
+				$(".text-shadow-code-output").text(current_shadow);
+				$(".text-shadow-output").css("text-shadow",values.split(";")[0]);
 				$(this).addClass('active');
 			});
 			$(".show_less").on("click",function(){
@@ -248,6 +265,7 @@ function TextShadow(args){
 				$(".fix").html(current_list);
 			});
 		}
+		generators.push(self);
 		return self;
 	};
 	//After everything is ok render the app
