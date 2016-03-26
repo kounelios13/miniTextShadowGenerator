@@ -11,7 +11,7 @@
 	<script src='src/bower_components/Filesaver.js/Filesaver.min.js'></script>
 	<script src="src/miniTextShadow.js"></script>
 	<script>
-	var gen=new TextShadow("#sample");
+	var gen=new TextShadow("#sample",[0,1,3]).activateGenerator();
 	var a=new TextShadow("#sample_2");
 	var list;
 	var ul;
@@ -28,6 +28,9 @@
 <body>
 	<div class="container">
 		<div class="jumbotron text-center">Mini Text Shadow generator</div>
+		<p style="font-size:18px">
+			This is a simple text-shadow generator.
+		</p>
 		<div id="sample">
 			<p>I will be backed up</p>
 			<ul class="list-group">
@@ -39,10 +42,19 @@
 				<li class="list-group-item">Item 6</li>
 			</ul>
 		</div>
-		<div id="button"class="btn btn-info" >Get code</div>
-		<div class="btn btn-info" onclick="gen.addToFavourites()">Add to favourites</div>
-		<div class="btn btn-primary" onclick="gen.showFavourites()">Show Favourites</div>
-		<hr>
+		<!-- <div class="btn-group">
+			<div id="button"class="btn btn-info" >Get code</div>
+			<div class="btn btn-primary" onclick="gen.activateGenerator()">Activate Generator</div>
+			<div class="btn btn-info" onclick="gen.addToFavourites()">Add to favourites</div>
+			<div class="btn btn-primary" onclick="gen.showFavourites()">Show Favourites</div>
+			<div class="btn btn-warning" onclick="gen.resetGenerator()">
+				Reset Generator
+			</div>
+			<div class="btn btn-warning" onclick="gen.deactivateGenerator()">Deactivate Generator
+			</div>
+		</div> -->
+
+
 		<div id="sample_2"></div>
 	</div>
 

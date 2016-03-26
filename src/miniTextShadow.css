@@ -1,10 +1,7 @@
 .text-shadow-slider{
 	width: 25%!important;
 }
-.slider-row{
-		max-width: 100%;
-		overflow: hidden;
-}
+
 .text-shadow-code-output{
 		border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -14,8 +11,8 @@
 .fix{
     margin-top: 8px;
 }
-.no-display{
-  display: none;
+.text-shadow-container{
+	margin-top:4px;
 }
 input[type='range']{
 	outline: none;
