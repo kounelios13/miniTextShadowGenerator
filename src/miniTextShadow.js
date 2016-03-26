@@ -8,11 +8,24 @@ function isChainable(name){
 	"getAllFavourites":false,"showFavourites":true,"getBackup":false,"restoreBackup":false};
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
-function TextShadow(args){
+function TextShadow(args,buttons){
 	function val(o){return $(o).val();}
 	function abs(a){return Math.abs(a);}
 	var self=this;
 	var host=null;
+	self.host_id=null;
+	if(typeof args != 'string' || !args || args[0]=='.' || !args[0]=="#")
+		throw new Error("Invalid id!!!"+args);
+	else
+		self.host_id=host=args;
+	var button_list={
+		0:"<div class='btn btn-primary activate'>Activate Generator</div>",
+		1:"<div class='btn btn-primary deactivate'>Deactivate Generator</div>",
+		2:"<div class='btn btn-warning reset'>Reset Generator</div>",
+		3:"<div class='btn btn-primary add'>Add to Favourites</div>",
+		4:"<div class='btn btn-primary show'>Show Favourites</div>",
+		5:"<div class='btn btn-danger remove'>Remove Favourites</div>"
+	};
 	self.generator_markup=""+
 	"<div class='text-shadow-container'> "+
 		"<div class='panel panel-primary'>"+
@@ -50,16 +63,24 @@ function TextShadow(args){
 				" <h3 class='text-info'>Opacity</h3> "+
 				"<input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> "+
 			"</div>"+
-			"</div><!-- /row -->"+
-		" </div> <!-- /panel-body --> "+
+			"</div><!-- /row -->";
+			if(buttons && typeof buttons=='object'){
+				var custom_btn="<div class='btn-group custom-buttons'>";
+				for(var i=0;i<buttons.length;i++){
+					var item=buttons[i];
+					if(button_list[item])
+						custom_btn+=button_list[item]+"\n";
+				}
+				self.generator_markup+=custom_btn+"</div>";
+			}
+			self.generator_markup+=""
+			+"</div> <!-- /panel-body --> "+
 			" <div class='panel-heading text-center text-shadow-code-output'>text-shadow:0px 0px rgb(0,0,0);</div>  "+
-		"</div>"+
+		"</div>";
 	"</div>";
-	self.host_id=null;
-	if(typeof args != 'string' || !args || args[0]=='.' || !args[0]=="#")
-		throw new Error("Invalid id!!!"+args);
-	else
-		self.host_id=host=args;
+
+
+
 	var code="none";
 	self.content_backup=null;
 	self.favourites=[];
@@ -71,6 +92,12 @@ function TextShadow(args){
 			$(document).on("ready",function(){
 				self.content_backup=$(host).html();
 				$(host).html(self.generator_markup);
+				$(host+" .activate").on("click",self.activateGenerator);
+				$(host+" .deactivate").on("click",self.deactivateGenerator);
+				$(host+" .reset").on("click",self.resetGenerator);
+				$(host+" .add").on("click",self.addToFavourites);
+				$(host+" .show").on("click",self.showFavourites);
+				$(host+" .remove").on("click",self.removeFavourites);
 			});
 		return self;
 	};
