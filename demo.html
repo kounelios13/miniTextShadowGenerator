@@ -11,7 +11,7 @@
 	<script src='src/bower_components/Filesaver.js/Filesaver.min.js'></script>
 	<script src="src/miniTextShadow.js"></script>
 	<script>
-	var gen=new TextShadow("#sample",[0,1,3]).activateGenerator();
+	var gen=new TextShadow("#sample").activateGenerator();
 	var a=new TextShadow("#sample_2");
 	var list;
 	var ul;
@@ -42,7 +42,7 @@
 				<li class="list-group-item">Item 6</li>
 			</ul>
 		</div>
-		<!-- <div class="btn-group">
+		 <div class="btn-group">
 			<div id="button"class="btn btn-info" >Get code</div>
 			<div class="btn btn-primary" onclick="gen.activateGenerator()">Activate Generator</div>
 			<div class="btn btn-info" onclick="gen.addToFavourites()">Add to favourites</div>
@@ -52,7 +52,7 @@
 			</div>
 			<div class="btn btn-warning" onclick="gen.deactivateGenerator()">Deactivate Generator
 			</div>
-		</div> -->
+		</div> 
 
 
 		<div id="sample_2"></div>
