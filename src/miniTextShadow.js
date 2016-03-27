@@ -24,7 +24,8 @@ function TextShadow(args,buttons){
 		2:"<div class='btn btn-warning reset'>Reset Generator</div>",
 		3:"<div class='btn btn-primary add'>Add to Favourites</div>",
 		4:"<div class='btn btn-primary show'>Show Favourites</div>",
-		5:"<div class='btn btn-danger remove'>Remove Favourites</div>"
+		5:"<div class='btn btn-danger remove'>Remove Favourites</div>",
+		//6:"<div class='btn btn-info'></div>"
 	};
 	self.generator_markup=""+
 	"<div class='text-shadow-container'> "+
@@ -64,6 +65,10 @@ function TextShadow(args,buttons){
 				"<input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> "+
 			"</div>"+
 			"</div><!-- /row -->";
+			//Let's see if we have to add default buttons.If the user wants to add default
+			//buttons they won't have to create extra buttons their own
+			if(typeof buttons != 'object' && buttons)
+				throw new Error("The list of the default buttons has to be an array not a "+typeof buttons);
 			if(buttons && typeof buttons=='object'){
 				var custom_btn="<div class='btn-group custom-buttons'>";
 				for(var i=0;i<buttons.length;i++){
@@ -248,18 +253,19 @@ function TextShadow(args,buttons){
 			});
 			$(".list-group").on("click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
+				//bugs are here :p
 				var current_shadow=$(this).text();
 				var values=current_shadow.split(":")[1];
-				var colors=values.split("(")[1].split(")")[0];
+				var colors=values.split("(")[1].split(")")[0].split(',');
 				var shadow_values=values.split("(")[0];
 				shadow_values=shadow_values.match(/\d+/g);
-				var shadow_sliders=$('.text-shadow-sliders');
+				var shadow_sliders=$(host+' .text-shadow-sliders');
 				for(var i=0;i<shadow_sliders.length;i++)
 					$(shadow_sliders[i]).val(shadow_values[i]);
 				var isRgba=colors.length==4;
-				var color=isRgba?"rgba("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+","+val(colors[3])+")":"rgb("+val(colors[0])+","+val(colors[1])+","+val(colors[2])+")";
-				$(".text-shadow-code-output").text(current_shadow);
-				$(".text-shadow-output").css("text-shadow",values.split(";")[0]);
+				var color=isRgba?"rgba("+colors[0]+","+colors[1]+","+colors[2]+","+colors[3]+")":"rgb("+colors[0]+","+colors[1]+","+colors[2]+")";
+				$(host+" .text-shadow-code-output").text(current_shadow);
+				$(host+" .text-shadow-output").css("text-shadow",values.split(";")[0]);
 				$(this).addClass('active');
 			});
 			$(".show_less").on("click",function(){
