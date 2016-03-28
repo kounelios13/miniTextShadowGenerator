@@ -9,7 +9,11 @@ function isChainable(name){
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
 function TextShadow(args,buttons){
-	function val(o){return $(o).val();}
+	function val(o){
+		if(!isNaN(o))
+			throw new Error("The item that you passed as argument is a number not a node");
+			return parseFloat($(o).val());
+	}
 	function abs(a){return Math.abs(a);}
 	var self=this;
 	var host=null;
@@ -25,7 +29,7 @@ function TextShadow(args,buttons){
 		3:"<div class='btn btn-primary add'>Add to Favourites</div>",
 		4:"<div class='btn btn-primary show'>Show Favourites</div>",
 		5:"<div class='btn btn-danger remove'>Remove Favourites</div>",
-		//6:"<div class='btn btn-info'></div>"
+		 //6:"<div class='btn btn-info'></div>"
 	};
 	self.generator_markup=""+
 	"<div class='text-shadow-container'> "+
@@ -83,9 +87,6 @@ function TextShadow(args,buttons){
 			" <div class='panel-heading text-center text-shadow-code-output'>text-shadow:0px 0px rgb(0,0,0);</div>  "+
 		"</div>";
 	"</div>";
-
-
-
 	var code="none";
 	self.content_backup=null;
 	self.favourites=[];
@@ -97,12 +98,14 @@ function TextShadow(args,buttons){
 			$(document).on("ready",function(){
 				self.content_backup=$(host).html();
 				$(host).html(self.generator_markup);
-				$(host+" .activate").on("click",self.activateGenerator);
-				$(host+" .deactivate").on("click",self.deactivateGenerator);
-				$(host+" .reset").on("click",self.resetGenerator);
-				$(host+" .add").on("click",self.addToFavourites);
-				$(host+" .show").on("click",self.showFavourites);
-				$(host+" .remove").on("click",self.removeFavourites);
+				if(buttons){
+					$(host+" .activate").on("click",self.activateGenerator);
+					$(host+" .deactivate").on("click",self.deactivateGenerator);
+					$(host+" .reset").on("click",self.resetGenerator);
+					$(host+" .add").on("click",self.addToFavourites);
+					$(host+" .show").on("click",self.showFavourites);
+					$(host+" .remove").on("click",self.removeFavourites);
+				}
 			});
 		return self;
 	};
@@ -253,15 +256,22 @@ function TextShadow(args,buttons){
 			});
 			$(".list-group").on("click",".list-group-item",function(){
 				$(".list-group li").removeClass('active');
-				//bugs are here :p
+				//Get the selected text shadow
 				var current_shadow=$(this).text();
+				//Get all the values without "text-shadow:"
 				var values=current_shadow.split(":")[1];
+				//Now get only the color values
 				var colors=values.split("(")[1].split(")")[0].split(',');
-				var shadow_values=values.split("(")[0];
-				shadow_values=shadow_values.match(/\d+/g);
+				//Get the shadow values without colors (only x,y axis and blur)
+				var shadow_values=values.split("rgb(")[0];
+				//Now extract the numbers from the text shadow to set each slider.
+				shadow_values=shadow_values.match(/[+-]?\d+(\.\d+)?/g);
 				var shadow_sliders=$(host+' .text-shadow-sliders');
+				var color_sliders=$(host+' .text-shadow-color-sliders');
 				for(var i=0;i<shadow_sliders.length;i++)
-					$(shadow_sliders[i]).val(shadow_values[i]);
+					$(shadow_sliders[i]).val(parseFloat(shadow_values[i]));
+				for(var i=0;i<colors.length;i++)
+					$(color_sliders[i]).val(parseFloat(colors[i]));
 				var isRgba=colors.length==4;
 				var color=isRgba?"rgba("+colors[0]+","+colors[1]+","+colors[2]+","+colors[3]+")":"rgb("+colors[0]+","+colors[1]+","+colors[2]+")";
 				$(host+" .text-shadow-code-output").text(current_shadow);
@@ -286,7 +296,8 @@ function TextShadow(args,buttons){
 					return;//max items displayed so exit the function
 				var current_list="";
 				var total=favourites.length;
-				var diff=total-index;//find how many items there are to display between the current index
+				//find how many items there are to display between the current index
+				var diff=total-index;
 				//and the total amount of favourites
 				var end;//the item to stop at
 				if(diff > 9)
@@ -299,7 +310,6 @@ function TextShadow(args,buttons){
 				$(".fix").html(current_list);
 			});
 		}
-
 		return self;
 	};
 	generators.push(self);
