@@ -1,18 +1,25 @@
 "use strict";
-var __version__='1.0.1';
 var generators=[];//Keep track of all TextShadow objects in a page
 function isChainable(name){
 	name=name[0]=='.'?name.slice(1).split("(")[0]:name.split("(")[0];//remove '.' and "(" and ")"
 	var tools={"activateGenerator":true,"deactivateGenerator":true,"setAxisValues":true,"resetGenerator":true,
 	"addToFavourites":true,"removeFavourites":true,"getId":false,"getFavourites":false,
-	"getAllFavourites":false,"showFavourites":true,"getBackup":false,"restoreBackup":false};
+	"getAllFavourites":false,"showFavourites":true,"getBackup":false,"restoreBackup":false,"delete":false};
 	return tools[name] != undefined ?tools[name]:false;//if the key does not exist in the above dictionary return  false else return its value
 }
+/**********'/'
+Errors to throw:
+1.Host is is body
+2.Filesaver.js is not present or cannot be used
+3.Trying to return $().val() of a number instead of a node that contains a number
+4.Invalid host id
+5.Invalid destination to restore backup
+/**********/
 function TextShadow(args,buttons){
 	function val(o){
 		if(!isNaN(o))
 			throw new Error("The item that you passed as argument is a number not a node");
-			return parseFloat($(o).val());
+			return $(o).val();
 	}
 	function abs(a){return Math.abs(a);}
 	var self=this;
@@ -20,6 +27,8 @@ function TextShadow(args,buttons){
 	self.host_id=null;
 	if(typeof args != 'string' || !args || args[0]=='.' || !args[0]=="#")
 		throw new Error("Invalid id!!!"+args);
+	else if (args=='body')
+		throw new Error("Body can't be used as container!!!");
 	else
 		self.host_id=host=args;
 	var button_list={
@@ -94,6 +103,9 @@ function TextShadow(args,buttons){
 		return self.host_id;
 	};
 	var render=function(){
+		//body can't be used as container
+		//because if multiple generators are present
+		//we won't be able to properly target the sliders of each generator
 		if(host != null && host[0]=='#')
 			$(document).on("ready",function(){
 				self.content_backup=$(host).html();
@@ -193,17 +205,23 @@ function TextShadow(args,buttons){
 		return self.favourites;
 	};
 	self.getAllFavourites=function(){
-		var all_favs=[];
-		for(var i=0,max=generators.length;i<max;i++){
-			var current_generator_list=generators[i].getFavourites();
-			for(var j=0,inner_max=current_generator_list.length;j<inner_max;j++){
-				var current_code=current_generator_list[j];
-				//Avoid duplicates
-				if(all_favs.indexOf(current_code)==-1)
-					all_favs.push(current_code);
-			}//j
-		}//i
-		return all_favs;
+		if(generators.length==1){
+			//There is only one TextShadow object so call the getFavourites method of this object
+			self.getFavourites();
+		}
+		else{
+			var all_favs=[];
+			for(var i=0,max=generators.length;i<max;i++){
+				var current_generator_list=generators[i].getFavourites();
+				for(var j=0,inner_max=current_generator_list.length;j<inner_max;j++){
+					var current_code=current_generator_list[j];
+					//Avoid duplicates
+					if(all_favs.indexOf(current_code)==-1)
+						all_favs.push(current_code);
+				}//j
+			}//i
+			return all_favs;
+		}
 	};
 	self.removeFavourites=function(){
 		if(self.favourites.length > 0)
@@ -220,7 +238,7 @@ function TextShadow(args,buttons){
 		var favourites=self.getFavourites();
 		var total=favourites.length;
 		if(total<1)
-			bootbox.alert("No favourites  to show!!!");
+			bootbox.alert("No favourites to show!!!");
 		else{
 			function renderlist(){
 				var ul="<ul class='list-group fix'>";
@@ -249,6 +267,8 @@ function TextShadow(args,buttons){
 					saveAs(new Blob([file], {type: "text/plain;charset=utf-8"}),"favourites.css");
 				}
 				catch(e){
+					//You are here?
+					//It's most likely you don't have filesaver support
 					var error_markup="<div class='alert alert-danger' role='alert' style='margin-top:8px'><strong>Filesaver</strong> is missing"+
 					".Can't download favourites</div><p class='text-warning'>Without Filesaver we are not able to access the filesystem</p>";
 					bootbox.alert(error_markup);
@@ -263,17 +283,18 @@ function TextShadow(args,buttons){
 				//Now get only the color values
 				var colors=values.split("(")[1].split(")")[0].split(',');
 				//Get the shadow values without colors (only x,y axis and blur)
-				var shadow_values=values.split("rgb(")[0];
-				//Now extract the numbers from the text shadow to set each slider.
-				shadow_values=shadow_values.match(/[+-]?\d+(\.\d+)?/g);
+				//Split based on the color mode(rgb/rgba)
+				var shadow_values=values.split(colors.length==4?"rgba(":"rgb(")[0];
+				//Now extract the numbers from the text shadow to set each slider.Match any digits and floating numbers
+				shadow_values=shadow_values.split(" ").map(function(i){
+					return parseFloat(i);
+				});
 				var shadow_sliders=$(host+' .text-shadow-sliders');
 				var color_sliders=$(host+' .text-shadow-color-sliders');
 				for(var i=0;i<shadow_sliders.length;i++)
 					$(shadow_sliders[i]).val(parseFloat(shadow_values[i]));
 				for(var i=0;i<colors.length;i++)
 					$(color_sliders[i]).val(parseFloat(colors[i]));
-				var isRgba=colors.length==4;
-				var color=isRgba?"rgba("+colors[0]+","+colors[1]+","+colors[2]+","+colors[3]+")":"rgb("+colors[0]+","+colors[1]+","+colors[2]+")";
 				$(host+" .text-shadow-code-output").text(current_shadow);
 				$(host+" .text-shadow-output").css("text-shadow",values.split(";")[0]);
 				$(this).addClass('active');
@@ -292,6 +313,8 @@ function TextShadow(args,buttons){
 			});
 			$(".show_more").on("click",function(){
 				"use strict";
+				//TODO implement this part with slice
+				//Slice the next 10 or less items we want to show from the favourites list
 				if(index>=favourites.length)
 					return;//max items displayed so exit the function
 				var current_list="";
@@ -312,6 +335,23 @@ function TextShadow(args,buttons){
 		}
 		return self;
 	};
+	self.delete=function(){
+		bootbox.confirm("Are you sure you want to delete the current TextShadow generator?",function(i){
+			if(i){
+				//Here we are going to delete/remove the current generator
+				//First deactivate the generator
+				self.deactivateGenerator();
+				//Then remove it and restore the contents os the host.
+				self.restoreBackup(self.getId());
+				//Note that the current object is not deleted from the global generators array just in case we change our mind
+			}
+			else{
+				bootbox.alert("Operation aborted!!!!");
+			}
+		});
+
+	};
+	//We need to keep tack of the TextShadow objects inside the page
 	generators.push(self);
 	//self.activateGenerator();
 	//After everything is ok render the app

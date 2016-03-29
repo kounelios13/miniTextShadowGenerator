@@ -10,20 +10,21 @@
 	<script src='src/bower_components/bootbox.js/bootbox.js'></script>
 	<script src='src/bower_components/Filesaver.js/Filesaver.min.js'></script>
 	<script src="src/miniTextShadow.js"></script>
-	<script>
-	var gen=new TextShadow("#sample",[0,1,2,3,4,5]).activateGenerator();
-	var a=new TextShadow("#sample_2",[0,2,4,3,5]);
-	var list;
-	var ul;
-	$(function(){
+	<script src='demo.js'></script>
+<style type="text/css">
 
-		$("#button").on("click",function(){
-		var text="<h3 class='text-primary text-center'>text-shadow:"+gen.getCode()+";</h3>";
-			bootbox.alert(text);
-		});
-	});
-	</script>
-
+/* .checkbox{
+	 height: 10px;
+    width: 10px;
+    background: dodgerblue;
+    display: inline-block;
+    bottom: -22px;
+    left: 5px;
+} */
+.selected_button{
+	box-shadow: 0 0 4px dodgerblue;
+}
+</style>
 </head>
 <body>
 	<div class="container">
@@ -42,20 +43,8 @@
 				<li class="list-group-item">Item 6</li>
 			</ul>
 		</div>
-		 <div class="btn-group" style="display:none">
-			<div id="button"class="btn btn-info" >Get code</div>
-			<div class="btn btn-primary" onclick="gen.activateGenerator()">Activate Generator</div>
-			<div class="btn btn-info" onclick="gen.addToFavourites()">Add to favourites</div>
-			<div class="btn btn-primary" onclick="gen.showFavourites()">Show Favourites</div>
-			<div class="btn btn-warning" onclick="gen.resetGenerator()">
-				Reset Generator
-			</div>
-			<div class="btn btn-warning" onclick="gen.deactivateGenerator()">Deactivate Generator
-			</div>
-		</div>
-
-
-		<div id="sample_2"></div>
+		<div id="createGenerator" class="btn btn-info">Create a TextShadow generator</div> 
+		<div id="demo_div"></div>
 	</div>
 
 </body>
