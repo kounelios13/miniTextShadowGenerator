@@ -22,5 +22,7 @@ Each TextShadow has 6 built in buttons which you can use if you don't want to cr
 
  So you choose the numbers for the buttons you want to add and pass them as an array to the constructor like this:
 
- var generator=new TextShadow("#sample",[0,1,2]);
+ ```var generator=new TextShadow("#sample",[0,1,2]);```
+ 
  This is what the above code looks like:
+ ![3buttons](images/3buttons.png)
