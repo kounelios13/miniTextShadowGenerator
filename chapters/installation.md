@@ -4,4 +4,4 @@
 
 ```<script src='path/to/miniTextShadow.js'></script>```
 
-```<link rel='stylesheet' href='path/to/miniTextShadow.css'>```
+```<link rel='stylesheet' href='path/to/miniTextShadow.css'/>```
