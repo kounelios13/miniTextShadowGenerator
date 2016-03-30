@@ -3,6 +3,7 @@
 	var userGenerator;
 	var btns;
 	$(function(){
+		$("#createGenerator").hide();
 		$("#button").on("click",function(){
 		var text="<h3 class='text-primary text-center'>text-shadow:"+gen.getCode()+";</h3>";
 			bootbox.alert(text);
@@ -48,16 +49,13 @@
 						"</div>";
 						bootbox.alert(markup,function(){
 							btns=$('.selected-button');
-
 							id=id[0]!="#"?"#"+id:id;
-							bootbox.alert("Code to enter in your script:\nvar generator=new TextShadow('"+id+"',"+btns.map(function(i){return i}).toString()+");");
+							bootbox.alert("Code to enter in your script:\nvar generator=new TextShadow('"+id+"',"+btns.map(Number).toString()+");");
 						});
 					}
 					//callback();
 				});
 			}//step2
-
 			step1(step2);
-
 		});
 	});

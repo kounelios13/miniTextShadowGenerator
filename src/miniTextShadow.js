@@ -15,7 +15,14 @@ Errors to throw:
 4.Invalid host id
 5.Invalid destination to restore backup
 /**********/
+/*******TODO*****
+Rename self methods:
+activateGenerator-->activate
+deactivateGenerator-->deactivate
+resetGenerator-->reset
+*****************/
 function TextShadow(args,buttons){
+
 	function val(o){
 		if(!isNaN(o))
 			throw new Error("The item that you passed as argument is a number not a node");
