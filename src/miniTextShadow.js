@@ -179,12 +179,20 @@ function TextShadow(args,buttons){
 		var sliders=$(host+" .text-shadow-sliders");
 		if(isNaN(value) || !value || !limit)
 			throw new Error("An error occured.");
-		var value=abs(value);
+		//var value=abs(value);
+		//TODO
+		//check if min > max
+		//but not today
 		switch(limit.toUpperCase()){
 			//we use for loop because we do not want to select every single slider
 			case "MIN":
+				var current_max=$(sliders[0]).prop("max");
+				if(value > current_max){
+					bootbox.alert("Minimum value can not be greater than maximum.Please try again");
+					return;
+				}
 				for(var i=0;i<sliders.length-1;i++)
-					$(sliders[i]).prop("min",value * -1);
+					$(sliders[i]).prop("min",value);
 				break;
 			default:
 				for(var i=0;i<sliders.length-1;i++)
