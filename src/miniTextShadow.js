@@ -179,10 +179,6 @@ function TextShadow(args,buttons){
 		var sliders=$(host+" .text-shadow-sliders");
 		if(isNaN(value) || !value || !limit)
 			throw new Error("An error occured.");
-		//var value=abs(value);
-		//TODO
-		//check if min > max
-		//but not today
 		switch(limit.toUpperCase()){
 			//we use for loop because we do not want to select every single slider
 			case "MIN":
