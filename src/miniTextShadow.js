@@ -22,7 +22,6 @@ deactivateGenerator-->deactivate
 resetGenerator-->reset
 *****************/
 function TextShadow(args,buttons){
-
 	function val(o){
 		if(!isNaN(o))
 			throw new Error("The item that you passed as argument is a number not a node");
@@ -113,7 +112,7 @@ function TextShadow(args,buttons){
 		//body can't be used as container
 		//because if multiple generators are present
 		//we won't be able to properly target the sliders of each generator
-		if(host != null && host[0]=='#')
+		if(host && host[0]=='#')
 			$(document).on("ready",function(){
 				self.content_backup=$(host).html();
 				$(host).html(self.generator_markup);
@@ -175,6 +174,8 @@ function TextShadow(args,buttons){
 		$(host).off();
 		return self;
 	};
+	self.activate = self.activateGenerator;
+	self.deactivate = self.deactivateGenerator;
 	self.setAxisValues=function(limit,value){
 		var sliders=$(host+" .text-shadow-sliders");
 		if(isNaN(value) || !value || !limit)
@@ -183,8 +184,8 @@ function TextShadow(args,buttons){
 			//we use for loop because we do not want to select every single slider
 			case "MIN":
 				var current_max=$(sliders[0]).prop("max");
-				if(value > current_max){
-					bootbox.alert("Minimum value can not be greater than maximum.Please try again");
+				if(value >= current_max){
+					bootbox.alert("Minimum value must be less than the maximum.Please try again");
 					return;
 				}
 				for(var i=0;i<sliders.length-1;i++)
@@ -237,8 +238,10 @@ function TextShadow(args,buttons){
 	self.removeFavourites=function(){
 		if(self.favourites.length > 0)
 			bootbox.confirm("Are you sure you want to erase your favourites?",function(del){
-				if(del)
+				if(del){
 					self.favourites.length=0;
+					bootbox.alert("Favourites deleted!!!");
+				}
 		});
 		else
 			bootbox.alert("There are no favourites to remove.");
@@ -324,8 +327,6 @@ function TextShadow(args,buttons){
 			});
 			$(".show_more").on("click",function(){
 				"use strict";
-				//TODO implement this part with slice
-				//Slice the next 10 or less items we want to show from the favourites list
 				if(index>=favourites.length)
 					return;//max items displayed so exit the function
 				var current_list="";
@@ -360,7 +361,6 @@ function TextShadow(args,buttons){
 				bootbox.alert("Operation aborted!!!!");
 			}
 		});
-
 	};
 	//We need to keep tack of the TextShadow objects inside the page
 	generators.push(self);
