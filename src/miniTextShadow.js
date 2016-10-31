@@ -210,7 +210,7 @@ function TextShadow(args,buttons){
 	self.getAllFavourites=function(){
 		if(generators.length==1){
 			//There is only one TextShadow object so call the getFavourites method of this object
-			self.getFavourites();
+			return self.getFavourites();
 		}
 		else{
 			var all_favs=[];
