@@ -176,25 +176,17 @@ function TextShadow(args,buttons){
 	};
 	self.activate = self.activateGenerator;
 	self.deactivate = self.deactivateGenerator;
-	self.setAxisValues=function(limit,value){
+	self.setAxisValues=function(min_or_max_limit,value){
 		var sliders=$(host+" .text-shadow-sliders");
-		if(isNaN(value) || !value || !limit)
+		if(isNaN(value) || !value || !min_or_max_limit)
 			throw new Error("An error occured.");
-		switch(limit.toUpperCase()){
-			//we use for loop because we do not want to select every single slider
-			case "MIN":
-				var current_max=$(sliders[0]).prop("max");
-				if(value >= current_max){
-					bootbox.alert("Minimum value must be less than the maximum.Please try again");
-					return;
-				}
-				for(var i=0;i<sliders.length-1;i++)
-					$(sliders[i]).prop("min",value);
-				break;
-			default:
-				for(var i=0;i<sliders.length-1;i++)
-					$(sliders[i]).prop("max",value);
-		}//switch
+		var limit = sliders.length -1;
+		var min_or_max = min_or_max_limit.toLowerCase() == "min"?"min":"max";
+		if(min_or_max == "min" && value >= $(sliders[0]).prop("max"))
+			bootbox.alert("Minimum value must be less than the maximum.Please try again");
+		else
+			for(var i = 0;i<limit;i++)
+				$(sliders[i]).prop(min_or_max,value);
 		return self;
 	};
 	self.resetGenerator=function(){
