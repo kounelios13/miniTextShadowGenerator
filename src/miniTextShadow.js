@@ -20,6 +20,8 @@ Rename self methods:
 activateGenerator-->activate
 deactivateGenerator-->deactivate
 resetGenerator-->reset
+ UPDATE 1/11/2016
+ There are bugs while showing more or less favourites
 *****************/
 function TextShadow(args,buttons){
 	function val(o){
@@ -90,7 +92,8 @@ function TextShadow(args,buttons){
 				throw new Error("The list of the default buttons has to be an array not a "+typeof buttons);
 			if(buttons && typeof buttons=='object'){
 				var custom_btn="<div class='btn-group custom-buttons'>";
-				for(var i=0;i<buttons.length;i++){
+				var max = buttons.length;
+				for(var i=0;i<max;i++){
 					var item=buttons[i];
 					if(button_list[item])
 						custom_btn+=button_list[item]+"\n";
@@ -263,9 +266,10 @@ function TextShadow(args,buttons){
 			$('.modal-body').on("click",".download_button",function(){
 				var file="/********\n";
 				var items=self.getFavourites();
-				if(items.length<1)
+				var max = items.length
+				if(!max)
 					return "No favourites found";
-				for(var i=0;i<items.length;i++)
+				for(var i=0;i<max;i++)
 					file+="text-shadow:"+items[i]+";\n";
 				file+="**************\n";
 				try{
@@ -318,10 +322,10 @@ function TextShadow(args,buttons){
 			});
 			$(".show_more").on("click",function(){
 				"use strict";
-				if(index>=favourites.length)
-					return;//max items displayed so exit the function
-				var current_list="";
 				var total=favourites.length;
+				if(index>=total)
+					return;//max items displayed so exit the function
+				var current_list="";				
 				//find how many items there are to display between the current index
 				var diff=total-index;
 				//and the total amount of favourites
@@ -330,6 +334,7 @@ function TextShadow(args,buttons){
 					end=index+10;
 				else
 					end=index+diff;
+				//end = index +(diff > 9?10:diff);
 				for(var i=index;i<end;i++)
 					current_list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
 				index=end;//The index to begin display more/less from
