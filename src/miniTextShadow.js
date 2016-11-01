@@ -30,6 +30,12 @@ function TextShadow(args,buttons){
 			return $(o).val();
 	}
 	function abs(a){return Math.abs(a);}
+	function createListItem(data,extra_class){
+		var list = 'list-group-item ';
+		if(extra_class)
+			list+=extra_class;
+		return "<li class="+list+">text-shadow:"+data+";</li>";
+	}
 	var self=this;
 	var host=null;
 	self.host_id=null;
@@ -258,7 +264,7 @@ function TextShadow(args,buttons){
 				+"</div></div>";
 				var max_items=total > 9?10:total;//Wanna show the first 10 items.If there are less than 10 don't show the first 10
 				for(var i=0;i<max_items;i++)
-					ul+="<li class='list-group-item favourite_item'>text-shadow:"+favourites[i]+";</li>";
+					ul+=createListItem(favourites[i],'favourite_item');
 				ul+="</ul>"+carrets;
 				return ul;
 			}
@@ -310,13 +316,13 @@ function TextShadow(args,buttons){
 			});
 			$(".show_less").on("click",function(){
 				"use strict";
-				if(index==0)
-					return;
+				/*if(index==0)
+					return;*/
 				var min_value=index>9?index-10:0;
 				var selected_items=favourites.slice(min_value,index);
 				var list="";
 				for(var i=0,max=selected_items.length;i<max;i++)
-					list+="<li class='list-group-item'>text-shadow:"+selected_items[i]+";</li>";
+					list+=createListItem(selected_items[i]);
 				index=min_value;
 				$('.fix').html(list);
 			});
@@ -336,7 +342,7 @@ function TextShadow(args,buttons){
 					end=index+diff;
 				//end = index +(diff > 9?10:diff);
 				for(var i=index;i<end;i++)
-					current_list+="<li class='list-group-item'>text-shadow:"+favourites[i]+";</li>";
+					current_list+=createListItem(favourites[i]);
 				index=end;//The index to begin display more/less from
 				$(".fix").html(current_list);
 			});
