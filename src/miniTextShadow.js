@@ -71,44 +71,45 @@ function TextShadow(args, buttons) {
 		//6:"<div class='btn btn-info'></div>"
 	};
 	self.generator_markup = "" +
-			"<div class='text-shadow-container'> " +
-				"<div class='panel panel-primary'>" +
-					"<div class='panel-heading text-center'>Text shadow Generator</div>" +
-					"<div class='panel-body'>" +
-						"<div class='row text-center'> " +
-							"<div class='col-md-4'> " +
-								"<h3 class='text-info'>X-axis</h3> " +
-								"<input type='range' class='text-shadow-sliders x-axis' min='-100' max='150' value=0>" +
-							"</div> " +
-							"<div class='col-md-4'>" +
-								" <h3 class='text-info'>Y-axis</h3> " +
-							"<input type='range' class='text-shadow-sliders y-axis' min='-100' max='150' value=0> " + "</div>" + "<div class='col-md-4'>" +
-							"<h3 class='text-info'>Blur</h3>" +
-							"<input type='range' class='text-shadow-sliders blur' min='0' max='10' step='0.1' value='0'> " +
-						"</div>" +
-					"</div>" +
-					" <div class='row text-center'> <div class='col-md-12'> <h3 class='text-shadow-output'>Shadow is applied here</h3> </div> </div> " +
-					"<div class='row text-center'> " +
-						"<div class='col-md-3'>" +
-							"<h3 class='text-info'>Red</h3> " +
-							"<input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> " +
-						" </div>" +
-						"<div class='col-md-3'> " +
-							" <h3 class='text-info'>Green</h3> " +
-							" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'>" +
-						" </div> " +
-						" <div class='col-md-3'> " +
-							"<h3 class='text-info'>Blue</h3> " +
-							" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> " +
-						" </div> " +
-						"<div class='col-md-3'> " +
-							" <h3 class='text-info'>Opacity</h3> " +
-							"<input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> " +
-						"</div>" +
-			"</div><!-- /row -->";
+		"<div class='text-shadow-container'> " +
+		"<div class='panel panel-primary'>" +
+		"<div class='panel-heading text-center'>Text shadow Generator</div>" +
+		"<div class='panel-body'>" +
+		"<div class='row text-center'> " +
+		"<div class='col-md-4'> " +
+		"<h3 class='text-info'>X-axis</h3> " +
+		"<input type='range' class='text-shadow-sliders x-axis' min='-100' max='150' value=0>" +
+		"</div> " +
+		"<div class='col-md-4'>" +
+		" <h3 class='text-info'>Y-axis</h3> " +
+		"<input type='range' class='text-shadow-sliders y-axis' min='-100' max='150' value=0> " + "</div>" + "<div class='col-md-4'>" +
+		"<h3 class='text-info'>Blur</h3>" +
+		"<input type='range' class='text-shadow-sliders blur' min='0' max='10' step='0.1' value='0'> " +
+		"</div>" +
+		"</div>" +
+		" <div class='row text-center'> <div class='col-md-12'> <h3 class='text-shadow-output'>Shadow is applied here</h3> </div> </div> " +
+		"<div class='row text-center'> " +
+		"<div class='col-md-3'>" +
+		"<h3 class='text-info'>Red</h3> " +
+		"<input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> " +
+		" </div>" +
+		"<div class='col-md-3'> " +
+		" <h3 class='text-info'>Green</h3> " +
+		" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'>" +
+		" </div> " +
+		" <div class='col-md-3'> " +
+		"<h3 class='text-info'>Blue</h3> " +
+		" <input type='range' class='text-shadow-color-sliders' min='0' max='255' step='1' value='0'> " +
+		" </div> " +
+		"<div class='col-md-3'> " +
+		" <h3 class='text-info'>Opacity</h3> " +
+		"<input type='range' class='text-shadow-color-sliders opacity' min='0' max='1' step='0.1' value='1'> " +
+		"</div>" +
+		"</div><!-- /row -->";
 	//Let's see if we have to add default buttons.If the user wants to add default
 	//buttons they won't have to create extra buttons their own
 	if (typeof buttons != 'object' && buttons)
+	//User has passed something as a parameter but it is not an object
 		throw new Error("The list of the default buttons has to be an array not a " + typeof buttons);
 	if (buttons && typeof buttons == 'object') {
 		var custom_btn = "<div class='btn-group custom-buttons'>";
@@ -122,8 +123,8 @@ function TextShadow(args, buttons) {
 	}
 	self.generator_markup += "" + "</div> <!-- /panel-body --> " +
 		" <div class='panel-heading text-center text-shadow-code-output'>text-shadow:0px 0px rgb(0,0,0);</div>  " +
-		"</div>"+
-	"</div>";
+		"</div>" +
+		"</div>";
 	var code = "none";
 	self.content_backup = null;
 	self.favourites = [];
@@ -219,7 +220,7 @@ function TextShadow(args, buttons) {
 		return self;
 	};
 	self.addToFavourites = function() {
-		//Checkif the current shadow is in the favourites list
+		//Check if the current shadow is in the favourites list and if there is an actual text-shadow code
 		//If it is not add it
 		if (self.favourites.indexOf(code) == -1 && code != "none")
 			self.favourites.push(code);
@@ -247,7 +248,7 @@ function TextShadow(args, buttons) {
 		}
 	};
 	self.removeFavourites = function() {
-		if (self.favourites.length > 0)
+		if (self.favourites.length)
 			bootbox.confirm("Are you sure you want to erase your favourites?", function(del) {
 				if (del) {
 					self.favourites.length = 0;
@@ -262,7 +263,7 @@ function TextShadow(args, buttons) {
 		var index = 10;
 		var favourites = self.getFavourites();
 		var total = favourites.length;
-		if (total < 1)
+		if (!total)
 			bootbox.alert("No favourites to show!!!");
 		else {
 			function renderlist() {
@@ -313,9 +314,11 @@ function TextShadow(args, buttons) {
 				});
 				var shadow_sliders = $(host + ' .text-shadow-sliders');
 				var color_sliders = $(host + ' .text-shadow-color-sliders');
-				for (var i = 0; i < shadow_sliders.length; i++)
+				var total_sliders = shadow_sliders.length;
+				var toal_colors = colors.length;
+				for (var i = 0; i < total_sliders; i++)
 					$(shadow_sliders[i]).val(parseFloat(shadow_values[i]));
-				for (var i = 0; i < colors.length; i++)
+				for (var i = 0; i < total_colors; i++)
 					$(color_sliders[i]).val(parseFloat(colors[i]));
 				$(host + " .text-shadow-code-output").text(current_shadow);
 				$(host + " .text-shadow-output").css("text-shadow", values.split(";")[0]);
